@@ -1581,7 +1581,7 @@ LOAD /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7-m/nofp/libgcc.a
  .debug_line    0x000000000000b2af      0x13f /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-init.o)
  .debug_line    0x000000000000b3ee      0x1bf /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memset.o)
 
-.debug_str      0x0000000000000000     0x37b6
+.debug_str      0x0000000000000000     0x37da
  .debug_str     0x0000000000000000      0x2f5 build/main.o
                                         0x330 (size before relaxing)
  .debug_str     0x00000000000002f5       0xde build/gpio.o
@@ -1612,11 +1612,10 @@ LOAD /usr/lib/gcc/arm-none-eabi/10.3.1/thumb/v7-m/nofp/libgcc.a
                                         0xc38 (size before relaxing)
  .debug_str     0x0000000000003531       0x4f build/system_stm32f1xx.o
                                         0x209 (size before relaxing)
- .debug_str     0x0000000000003580       0x22 build/startup_stm32f103xb.o
-                                         0x3b (size before relaxing)
- .debug_str     0x00000000000035a2      0x16e /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-init.o)
+ .debug_str     0x0000000000003580       0x46 build/startup_stm32f103xb.o
+ .debug_str     0x00000000000035c6      0x16e /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-init.o)
                                         0x203 (size before relaxing)
- .debug_str     0x0000000000003710       0xa6 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memset.o)
+ .debug_str     0x0000000000003734       0xa6 /usr/lib/gcc/arm-none-eabi/10.3.1/../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(lib_a-memset.o)
                                         0x1b8 (size before relaxing)
 
 .debug_frame    0x0000000000000000     0x1e60

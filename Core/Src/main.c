@@ -44,11 +44,43 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+unsigned char f_timer_10ms=0;
 
+unsigned char curr_event;
+unsigned char bufferEvent[64];
+char seven_segment_table[17] = {	0b1111110,	// '0'
+		                            	0b0110000,	// '1'
+		   	                          0b1101101,	// '2'
+			                            0b1111001,	// '3'
+			                            0b0110011,	// '4'
+			                            0b1011011,	// '5'
+			                            0b1011111,	// '6'
+			                            0b1110000,	// '7'
+			                            0b1111111,	// '8'
+			                            0b1111011,	// '9'
+			                            0b1111101,	// 'a'  --10
+			                            0b0011111,	// 'b'  --11
+			                            0b0001101,	// 'c'  --12
+			                            0b0111101,	// 'd'  --13
+			                            0b1101111,	// 'e'	--14
+			                            0b1000111,	// 'f'  --15
+			                            0b0000001 	// '-'  --16
+};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+
+void task_timer(void);
+void seven_segment_display(void);
+void key_read_task(void);
+void main_task(void);
+void setEvent(unsigned char event);
+void getevent(unsigned char* event);
+void uart_TX_task(void);
+void uart_RX_task(void);
+void Set_Transmitter_RS485(void);
+void Set_Receiver_RS485(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -90,6 +122,9 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_TIM_Base_Start_IT(&htim1);  
+
+  HAL_UART_Receive_IT(&huart1,&rx_buffer1[rx1_wp], 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -144,6 +179,83 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+void task_timer(void)
+{
+
+}
+
+void seven_segment_display(void)
+{
+
+}
+
+void key_read_task(void)
+{
+
+}
+
+void main_task(void)
+{
+
+}
+
+void setEvent(unsigned char event)
+{
+
+}
+
+void getevent(unsigned char* event)
+{
+
+}
+
+void uart_TX_task(void)
+{
+
+}
+
+void uart_RX_task(void)
+{
+
+}
+
+void Set_Transmitter_RS485(void)
+{
+
+}
+
+void Set_Receiver_RS485(void)
+{
+
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  // Check which version of the timer triggered this callback and toggle LED
+  if (htim == &htim1)
+  {
+	  f_timer_10ms=1;
+  }
+  
+}
+
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	//HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+
+	if (huart == &huart1)
+	{
+		rx1_wp++;
+		HAL_UART_Receive_IT(&huart1, &rx_buffer1[rx1_wp], 1);
+		 if(rx1_wp>63){
+		    	rx1_wp=0;
+		    }
+	}
+
+
+}
 /* USER CODE END 4 */
 
 /**
