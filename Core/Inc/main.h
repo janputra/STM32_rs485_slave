@@ -80,13 +80,7 @@ void Error_Handler(void);
 #define KEY_RELEASED 0b0011
 
 
-typedef struct circular_buffer
-{
-  uint8_t head;
-  uint8_t tail;
-  uint8_t data[64];
 
-}circular_buffer;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

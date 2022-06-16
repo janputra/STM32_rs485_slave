@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "main.h"
+#include "buffer.h"
 
 typedef struct messsage
 {
