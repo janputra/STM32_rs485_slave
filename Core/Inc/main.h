@@ -67,14 +67,17 @@ void Error_Handler(void);
 #define d_GPIO_Port GPIOA
 #define e_Pin GPIO_PIN_4
 #define e_GPIO_Port GPIOA
-#define eA5_Pin GPIO_PIN_5
-#define eA5_GPIO_Port GPIOA
-#define f_Pin GPIO_PIN_6
+#define f_Pin GPIO_PIN_5
 #define f_GPIO_Port GPIOA
+#define g_Pin GPIO_PIN_6
+#define g_GPIO_Port GPIOA
 #define key_Pin GPIO_PIN_7
 #define key_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
+#define SEGMENT_PORT GPIOA
 
+#define KEY_PRESSED 0b1100     
+#define KEY_RELEASED 0b0011
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

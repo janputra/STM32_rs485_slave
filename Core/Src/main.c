@@ -45,9 +45,13 @@
 
 /* USER CODE BEGIN PV */
 unsigned char f_timer_10ms=0;
-
+unsigned char f_timer_30ms=0;
+unsigned char d_timer_30ms;
+unsigned char key_value;
 unsigned char curr_event;
 unsigned char bufferEvent[64];
+
+int digit;
 char seven_segment_table[17] = {	0b1111110,	// '0'
 		                            	0b0110000,	// '1'
 		   	                          0b1101101,	// '2'
@@ -72,7 +76,7 @@ char seven_segment_table[17] = {	0b1111110,	// '0'
 void SystemClock_Config(void);
 
 void task_timer(void);
-void seven_segment_display(void);
+void seven_segment_display(char input);
 void key_read_task(void);
 void main_task(void);
 void setEvent(unsigned char event);
@@ -121,12 +125,13 @@ int main(void)
   MX_TIM1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  
   HAL_TIM_Base_Start_IT(&htim1);  
 
-  HAL_UART_Receive_IT(&huart1,&rx_buffer1[rx1_wp], 1);
+  //HAL_UART_Receive_IT(&huart1,&rx_buffer1[rx1_wp], 1);
   /* USER CODE END 2 */
-
+  digit=0;
+  seven_segment_display(seven_segment_table[digit]);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -181,16 +186,40 @@ void SystemClock_Config(void)
 
 void task_timer(void)
 {
+  if (!f_timer_10ms) return;
+  f_timer_10ms=0;
+
+  d_timer_30ms++;
+
+  if(d_timer_30ms==3){
+    d_timer_30ms =0;
+    f_timer_10ms=1;
+  }
+  
 
 }
 
-void seven_segment_display(void)
+void seven_segment_display(char input)
 {
-
+   uint32_t mask =  a_Pin|b_Pin|c_Pin|d_Pin|e_Pin|f_Pin|g_Pin;
+   uint32_t val = (uint32_t)input & mask;
+   SEGMENT_PORT->ODR = val;
 }
 
 void key_read_task(void)
 {
+  if(!f_timer_30ms) return;
+  unsigned char key_pindata = (uint8_t)(key_GPIO_Port->IDR & key_Pin);
+
+  key_value = key_value<<1;
+  key_value &= 0b00001110;
+  key_value |= (key_pindata>>key_Pin)&0x1;
+
+  if (key_value==KEY_PRESSED){
+
+  }else if(key_value==KEY_RELEASED){
+
+  }
 
 }
 
@@ -247,11 +276,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 	if (huart == &huart1)
 	{
-		rx1_wp++;
+	/*	rx1_wp++;
 		HAL_UART_Receive_IT(&huart1, &rx_buffer1[rx1_wp], 1);
 		 if(rx1_wp>63){
 		    	rx1_wp=0;
-		    }
+		    }*/
 	}
 
 
