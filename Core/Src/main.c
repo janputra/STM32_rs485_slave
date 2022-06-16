@@ -21,6 +21,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "message.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -70,6 +71,9 @@ char seven_segment_table[17] = {	0b1111110,	// '0'
 			                            0b1000111,	// 'f'  --15
 			                            0b0000001 	// '-'  --16
 };
+
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
