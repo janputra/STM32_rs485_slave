@@ -1,0 +1,90 @@
+ARM GAS  /tmp/cc2X84wt.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"buffer.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.buffer_push,"ax",%progbits
+  16              		.align	1
+  17              		.global	buffer_push
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	buffer_push:
+  25              	.LVL0:
+  26              	.LFB65:
+  27              		.file 1 "Core/Src/buffer.c"
+   1:Core/Src/buffer.c **** #include "buffer.h"
+   2:Core/Src/buffer.c **** 
+   3:Core/Src/buffer.c **** void buffer_push(circular_buffer *buffer, uint8_t input)
+   4:Core/Src/buffer.c **** {
+  28              		.loc 1 4 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+   5:Core/Src/buffer.c **** 
+   6:Core/Src/buffer.c **** 
+   7:Core/Src/buffer.c **** }
+  33              		.loc 1 7 1 view .LVU1
+  34 0000 7047     		bx	lr
+  35              		.cfi_endproc
+  36              	.LFE65:
+  38              		.section	.text.buffer_pop,"ax",%progbits
+  39              		.align	1
+  40              		.global	buffer_pop
+  41              		.syntax unified
+  42              		.thumb
+  43              		.thumb_func
+  44              		.fpu softvfp
+  46              	buffer_pop:
+  47              	.LVL1:
+  48              	.LFB66:
+   8:Core/Src/buffer.c **** 
+   9:Core/Src/buffer.c **** uint8_t buffer_pop(circular_buffer *buffer)
+  10:Core/Src/buffer.c **** {
+  49              		.loc 1 10 1 view -0
+  50              		.cfi_startproc
+ARM GAS  /tmp/cc2X84wt.s 			page 2
+
+
+  51              		@ args = 0, pretend = 0, frame = 0
+  52              		@ frame_needed = 0, uses_anonymous_args = 0
+  53              		@ link register save eliminated.
+  11:Core/Src/buffer.c **** 
+  12:Core/Src/buffer.c **** 
+  13:Core/Src/buffer.c **** }...
+  54              		.loc 1 13 1 view .LVU3
+  55              	.LVL2:
+  56              		.loc 1 13 1 is_stmt 0 view .LVU4
+  57 0000 7047     		bx	lr
+  58              		.cfi_endproc
+  59              	.LFE66:
+  61              		.text
+  62              	.Letext0:
+  63              		.file 2 "Core/Inc/buffer.h"
+  64              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ARM GAS  /tmp/cc2X84wt.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 buffer.c
+     /tmp/cc2X84wt.s:16     .text.buffer_push:0000000000000000 $t
+     /tmp/cc2X84wt.s:24     .text.buffer_push:0000000000000000 buffer_push
+     /tmp/cc2X84wt.s:39     .text.buffer_pop:0000000000000000 $t
+     /tmp/cc2X84wt.s:46     .text.buffer_pop:0000000000000000 buffer_pop
+
+NO UNDEFINED SYMBOLS

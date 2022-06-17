@@ -4,8 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/jan/Project/Rs-485/Drivers",
-                "/home/jan/Project/Rs-485/Core/Inc"
+                "./Drivers",
+                "./Core/Inc"
             ],
             "defines": [
                 "USE_HAL_DRIVER",
