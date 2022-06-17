@@ -45,15 +45,24 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-unsigned char f_timer_10ms=0;
-unsigned char f_timer_30ms=0;
-unsigned char d_timer_30ms;
-unsigned char key_value;
-unsigned char curr_event;
-unsigned char bufferEvent[64];
+uint8_t f_timer_10ms=0;
+uint8_t f_timer_30ms=0;
+uint8_t d_timer_30ms;
+uint8_t key_value;
+uint8_t curr_event;
+//uint8_t bufferEvent[64];
+uint8_t rx_temp;
+uint8_t start_transmission;
+uint8_t start_cmd=0x2;
+uint8_t stop_cmd=0x3;
+circular_buffer rx_buffer;
+circular_buffer event_buffer;
+uint8_t ID;
+message TX_msg;
+message RX_msg;
 
 int digit;
-char seven_segment_table[17] = {	0b1111110,	// '0'
+uint8_t seven_segment_table[17] = {	0b1111110,	// '0'
 		                            	0b0110000,	// '1'
 		   	                          0b1101101,	// '2'
 			                            0b1111001,	// '3'
@@ -79,18 +88,14 @@ char seven_segment_table[17] = {	0b1111110,	// '0'
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 
+
+/* USER CODE BEGIN PFP */
 void task_timer(void);
 void seven_segment_display(char input);
 void key_read_task(void);
 void main_task(void);
-void setEvent(unsigned char event);
-void getevent(unsigned char* event);
-void uart_TX_task(void);
-void uart_RX_task(void);
-void Set_Transmitter_RS485(void);
-void Set_Receiver_RS485(void);
-/* USER CODE BEGIN PFP */
-
+void RS485_Send_Message(void);
+void RS485_Read_Message(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -132,7 +137,7 @@ int main(void)
   
   HAL_TIM_Base_Start_IT(&htim1);  
 
-  //HAL_UART_Receive_IT(&huart1,&rx_buffer1[rx1_wp], 1);
+  HAL_UART_Receive_IT(&huart1,&rx_temp, 1);
   /* USER CODE END 2 */
   digit=0;
   seven_segment_display(seven_segment_table[digit]);
@@ -220,9 +225,10 @@ void key_read_task(void)
   key_value |= (key_pindata>>key_Pin)&0x1;
 
   if (key_value==KEY_PRESSED){
+      buffer_push(&event_buffer,KEY_PRESSED);
 
   }else if(key_value==KEY_RELEASED){
-
+      buffer_push(&event_buffer,KEY_RELEASED);
   }
 
 }
@@ -232,33 +238,38 @@ void main_task(void)
 
 }
 
-void setEvent(unsigned char event)
-{
+void RS485_Read_Message(void){
 
+  if (start_transmission) return;
+
+  buffer_to_message(&rx_buffer, &RX_msg);
+
+  if (check_checksum(RX_msg)==CHECKSUM_ERROR) return;
+  if (RX_msg.address != ID) return;
+
+  if (RX_msg.function_code == FUNC_READ)
+  {
+
+  }
+  else if (RX_msg.function_code == FUNC_WRITE)
+  { 
+      digit = (int)RX_msg.data;
+  }
+  
 }
 
-void getevent(unsigned char* event)
+void RS485_Send_Message(void)
 {
 
-}
+   //uint8_t *pbuf_tx = (uint8_t *)&msg; 
+   /// Enable Transmitter Mode
+   HAL_UART_Transmit(&huart1,&start_cmd,1,10);
+  
+   HAL_UART_Transmit(&huart1,(uint8_t *)&TX_msg,sizeof(TX_msg),10);
 
-void uart_TX_task(void)
-{
-
-}
-
-void uart_RX_task(void)
-{
-
-}
-
-void Set_Transmitter_RS485(void)
-{
-
-}
-
-void Set_Receiver_RS485(void)
-{
+   HAL_UART_Transmit(&huart1,&stop_cmd,1,10);
+  
+   /// Enable Receiver Mode
 
 }
 
@@ -279,15 +290,24 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	//HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 
 	if (huart == &huart1)
-	{
-	/*	rx1_wp++;
-		HAL_UART_Receive_IT(&huart1, &rx_buffer1[rx1_wp], 1);
-		 if(rx1_wp>63){
-		    	rx1_wp=0;
-		    }*/
-	}
+	{ 
 
+    if (start_transmission){
+      if (!(rx_temp==0x3)){
+        buffer_push(&rx_buffer,rx_temp);
+      }
+      else{
+        start_transmission = 0;
+      }
+    }else{
+       if (rx_temp==0x2){
+        start_transmission = 1;
+      } 
+    }
 
+    HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
+    
+  }
 }
 /* USER CODE END 4 */
 

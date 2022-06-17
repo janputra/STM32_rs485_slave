@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cc2X84wt.s 			page 1
+ARM GAS  /tmp/ccq794NI.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -30,61 +30,118 @@ ARM GAS  /tmp/cc2X84wt.s 			page 1
    1:Core/Src/buffer.c **** #include "buffer.h"
    2:Core/Src/buffer.c **** 
    3:Core/Src/buffer.c **** void buffer_push(circular_buffer *buffer, uint8_t input)
-   4:Core/Src/buffer.c **** {
+   4:Core/Src/buffer.c **** {   
   28              		.loc 1 4 1 view -0
   29              		.cfi_startproc
   30              		@ args = 0, pretend = 0, frame = 0
   31              		@ frame_needed = 0, uses_anonymous_args = 0
   32              		@ link register save eliminated.
-   5:Core/Src/buffer.c **** 
-   6:Core/Src/buffer.c **** 
-   7:Core/Src/buffer.c **** }
-  33              		.loc 1 7 1 view .LVU1
-  34 0000 7047     		bx	lr
-  35              		.cfi_endproc
-  36              	.LFE65:
-  38              		.section	.text.buffer_pop,"ax",%progbits
-  39              		.align	1
-  40              		.global	buffer_pop
-  41              		.syntax unified
-  42              		.thumb
-  43              		.thumb_func
-  44              		.fpu softvfp
-  46              	buffer_pop:
-  47              	.LVL1:
-  48              	.LFB66:
-   8:Core/Src/buffer.c **** 
-   9:Core/Src/buffer.c **** uint8_t buffer_pop(circular_buffer *buffer)
-  10:Core/Src/buffer.c **** {
-  49              		.loc 1 10 1 view -0
-  50              		.cfi_startproc
-ARM GAS  /tmp/cc2X84wt.s 			page 2
+   5:Core/Src/buffer.c ****     buffer->data[buffer->head]=input;
+  33              		.loc 1 5 5 view .LVU1
+  34              		.loc 1 5 24 is_stmt 0 view .LVU2
+  35 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+  36              		.loc 1 5 31 view .LVU3
+  37 0002 C218     		adds	r2, r0, r3
+  38 0004 9170     		strb	r1, [r2, #2]
+   6:Core/Src/buffer.c ****     buffer->head++;
+  39              		.loc 1 6 5 is_stmt 1 view .LVU4
+  40              		.loc 1 6 17 is_stmt 0 view .LVU5
+  41 0006 0133     		adds	r3, r3, #1
+  42 0008 DBB2     		uxtb	r3, r3
+  43 000a 0370     		strb	r3, [r0]
+   7:Core/Src/buffer.c ****     
+   8:Core/Src/buffer.c ****     if (buffer->head>63){
+  44              		.loc 1 8 5 is_stmt 1 view .LVU6
+  45              		.loc 1 8 8 is_stmt 0 view .LVU7
+  46 000c 3F2B     		cmp	r3, #63
+  47 000e 01D9     		bls	.L1
+   9:Core/Src/buffer.c ****         buffer->head=0;
+  48              		.loc 1 9 9 is_stmt 1 view .LVU8
+  49              		.loc 1 9 21 is_stmt 0 view .LVU9
+ARM GAS  /tmp/ccq794NI.s 			page 2
 
 
-  51              		@ args = 0, pretend = 0, frame = 0
-  52              		@ frame_needed = 0, uses_anonymous_args = 0
-  53              		@ link register save eliminated.
+  50 0010 0023     		movs	r3, #0
+  51 0012 0370     		strb	r3, [r0]
+  52              	.L1:
+  10:Core/Src/buffer.c ****     }
   11:Core/Src/buffer.c **** 
-  12:Core/Src/buffer.c **** 
-  13:Core/Src/buffer.c **** }...
-  54              		.loc 1 13 1 view .LVU3
-  55              	.LVL2:
-  56              		.loc 1 13 1 is_stmt 0 view .LVU4
-  57 0000 7047     		bx	lr
-  58              		.cfi_endproc
-  59              	.LFE66:
-  61              		.text
-  62              	.Letext0:
-  63              		.file 2 "Core/Inc/buffer.h"
-  64              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
-ARM GAS  /tmp/cc2X84wt.s 			page 3
+  12:Core/Src/buffer.c **** }
+  53              		.loc 1 12 1 view .LVU10
+  54 0014 7047     		bx	lr
+  55              		.cfi_endproc
+  56              	.LFE65:
+  58              		.section	.text.buffer_pop,"ax",%progbits
+  59              		.align	1
+  60              		.global	buffer_pop
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  64              		.fpu softvfp
+  66              	buffer_pop:
+  67              	.LVL1:
+  68              	.LFB66:
+  13:Core/Src/buffer.c **** 
+  14:Core/Src/buffer.c **** uint8_t buffer_pop(circular_buffer *buffer)
+  15:Core/Src/buffer.c **** {
+  69              		.loc 1 15 1 is_stmt 1 view -0
+  70              		.cfi_startproc
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 0, uses_anonymous_args = 0
+  73              		@ link register save eliminated.
+  74              		.loc 1 15 1 is_stmt 0 view .LVU12
+  75 0000 0246     		mov	r2, r0
+  16:Core/Src/buffer.c ****     uint8_t buf_data = buffer->data[buffer->tail];
+  76              		.loc 1 16 5 is_stmt 1 view .LVU13
+  77              		.loc 1 16 43 is_stmt 0 view .LVU14
+  78 0002 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
+  79              		.loc 1 16 13 view .LVU15
+  80 0004 C118     		adds	r1, r0, r3
+  81 0006 8878     		ldrb	r0, [r1, #2]	@ zero_extendqisi2
+  82              	.LVL2:
+  17:Core/Src/buffer.c ****     buffer->tail++;
+  83              		.loc 1 17 5 is_stmt 1 view .LVU16
+  84              		.loc 1 17 17 is_stmt 0 view .LVU17
+  85 0008 0133     		adds	r3, r3, #1
+  86 000a DBB2     		uxtb	r3, r3
+  87 000c 5370     		strb	r3, [r2, #1]
+  18:Core/Src/buffer.c **** 
+  19:Core/Src/buffer.c ****      if (buffer->tail>63){
+  88              		.loc 1 19 6 is_stmt 1 view .LVU18
+  89              		.loc 1 19 9 is_stmt 0 view .LVU19
+  90 000e 3F2B     		cmp	r3, #63
+  91 0010 01D9     		bls	.L4
+  20:Core/Src/buffer.c ****         buffer->tail=0;
+  92              		.loc 1 20 9 is_stmt 1 view .LVU20
+  93              		.loc 1 20 21 is_stmt 0 view .LVU21
+  94 0012 0023     		movs	r3, #0
+  95 0014 5370     		strb	r3, [r2, #1]
+  96              	.L4:
+  21:Core/Src/buffer.c ****     }
+ARM GAS  /tmp/ccq794NI.s 			page 3
+
+
+  22:Core/Src/buffer.c ****     return buf_data;
+  97              		.loc 1 22 5 is_stmt 1 view .LVU22
+  23:Core/Src/buffer.c **** 
+  24:Core/Src/buffer.c **** 
+  25:Core/Src/buffer.c **** }...
+  98              		.loc 1 25 1 is_stmt 0 view .LVU23
+  99 0016 7047     		bx	lr
+ 100              		.cfi_endproc
+ 101              	.LFE66:
+ 103              		.text
+ 104              	.Letext0:
+ 105              		.file 2 "Core/Inc/buffer.h"
+ 106              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ARM GAS  /tmp/ccq794NI.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 buffer.c
-     /tmp/cc2X84wt.s:16     .text.buffer_push:0000000000000000 $t
-     /tmp/cc2X84wt.s:24     .text.buffer_push:0000000000000000 buffer_push
-     /tmp/cc2X84wt.s:39     .text.buffer_pop:0000000000000000 $t
-     /tmp/cc2X84wt.s:46     .text.buffer_pop:0000000000000000 buffer_pop
+     /tmp/ccq794NI.s:16     .text.buffer_push:0000000000000000 $t
+     /tmp/ccq794NI.s:24     .text.buffer_push:0000000000000000 buffer_push
+     /tmp/ccq794NI.s:59     .text.buffer_pop:0000000000000000 $t
+     /tmp/ccq794NI.s:66     .text.buffer_pop:0000000000000000 buffer_pop
 
 NO UNDEFINED SYMBOLS

@@ -79,7 +79,11 @@ void Error_Handler(void);
 #define KEY_PRESSED 0b1100     
 #define KEY_RELEASED 0b0011
 
+#define CHECKSUM_ERROR 0
+#define CHECKSUM_NO_ERROR 1
 
+#define EVENT_KEY_PRESSED 1
+#define EVENT_KEY_RELEASED 2
 
 /* USER CODE END Private defines */
 

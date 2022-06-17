@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccRzNkqv.s 			page 1
+ARM GAS  /tmp/ccsGhXtM.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -15,11 +15,97 @@ ARM GAS  /tmp/ccRzNkqv.s 			page 1
   12              		.text
   13              	.Ltext0:
   14              		.cfi_sections	.debug_frame
-  15              	.Letext0:
-ARM GAS  /tmp/ccRzNkqv.s 			page 2
+  15              		.section	.text.buffer_to_message,"ax",%progbits
+  16              		.align	1
+  17              		.global	buffer_to_message
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	buffer_to_message:
+  25              	.LVL0:
+  26              	.LFB65:
+  27              		.file 1 "Core/Src/message.c"
+   1:Core/Src/message.c **** #include "message.h"
+   2:Core/Src/message.c **** 
+   3:Core/Src/message.c **** void buffer_to_message(circular_buffer* buffer, message *message)
+   4:Core/Src/message.c **** {
+  28              		.loc 1 4 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 4 1 is_stmt 0 view .LVU1
+  33 0000 38B5     		push	{r3, r4, r5, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 16
+  36              		.cfi_offset 3, -16
+  37              		.cfi_offset 4, -12
+  38              		.cfi_offset 5, -8
+  39              		.cfi_offset 14, -4
+  40 0002 0546     		mov	r5, r0
+  41 0004 0C46     		mov	r4, r1
+   5:Core/Src/message.c ****     message->header = buffer_pop(buffer);
+  42              		.loc 1 5 5 is_stmt 1 view .LVU2
+  43              		.loc 1 5 23 is_stmt 0 view .LVU3
+  44 0006 FFF7FEFF 		bl	buffer_pop
+  45              	.LVL1:
+  46              		.loc 1 5 21 view .LVU4
+  47 000a 2070     		strb	r0, [r4]
+   6:Core/Src/message.c ****     message->address = buffer_pop(buffer);
+  48              		.loc 1 6 5 is_stmt 1 view .LVU5
+  49              		.loc 1 6 24 is_stmt 0 view .LVU6
+  50 000c 2846     		mov	r0, r5
+  51 000e FFF7FEFF 		bl	buffer_pop
+  52              	.LVL2:
+ARM GAS  /tmp/ccsGhXtM.s 			page 2
+
+
+  53              		.loc 1 6 22 view .LVU7
+  54 0012 6070     		strb	r0, [r4, #1]
+   7:Core/Src/message.c ****     message->function_code = buffer_pop(buffer);
+  55              		.loc 1 7 5 is_stmt 1 view .LVU8
+  56              		.loc 1 7 30 is_stmt 0 view .LVU9
+  57 0014 2846     		mov	r0, r5
+  58 0016 FFF7FEFF 		bl	buffer_pop
+  59              	.LVL3:
+  60              		.loc 1 7 28 view .LVU10
+  61 001a A070     		strb	r0, [r4, #2]
+   8:Core/Src/message.c ****     message->data= buffer_pop(buffer);
+  62              		.loc 1 8 5 is_stmt 1 view .LVU11
+  63              		.loc 1 8 20 is_stmt 0 view .LVU12
+  64 001c 2846     		mov	r0, r5
+  65 001e FFF7FEFF 		bl	buffer_pop
+  66              	.LVL4:
+  67              		.loc 1 8 18 view .LVU13
+  68 0022 E070     		strb	r0, [r4, #3]
+   9:Core/Src/message.c ****     message->checksum = buffer_pop(buffer);
+  69              		.loc 1 9 5 is_stmt 1 view .LVU14
+  70              		.loc 1 9 25 is_stmt 0 view .LVU15
+  71 0024 2846     		mov	r0, r5
+  72 0026 FFF7FEFF 		bl	buffer_pop
+  73              	.LVL5:
+  74              		.loc 1 9 23 view .LVU16
+  75 002a 2071     		strb	r0, [r4, #4]
+  10:Core/Src/message.c **** 
+  11:Core/Src/message.c **** }...
+  76              		.loc 1 11 1 view .LVU17
+  77 002c 38BD     		pop	{r3, r4, r5, pc}
+  78              		.loc 1 11 1 view .LVU18
+  79              		.cfi_endproc
+  80              	.LFE65:
+  82              		.text
+  83              	.Letext0:
+  84              		.file 2 "Core/Inc/buffer.h"
+  85              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+  86              		.file 4 "Core/Inc/message.h"
+ARM GAS  /tmp/ccsGhXtM.s 			page 3
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 message.c
+     /tmp/ccsGhXtM.s:16     .text.buffer_to_message:0000000000000000 $t
+     /tmp/ccsGhXtM.s:24     .text.buffer_to_message:0000000000000000 buffer_to_message
 
-NO UNDEFINED SYMBOLS
+UNDEFINED SYMBOLS
+buffer_pop
