@@ -21,11 +21,11 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "message.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "message.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
