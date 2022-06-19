@@ -71,8 +71,10 @@ void Error_Handler(void);
 #define f_GPIO_Port GPIOA
 #define g_Pin GPIO_PIN_6
 #define g_GPIO_Port GPIOA
-#define key_Pin GPIO_PIN_7
-#define key_GPIO_Port GPIOA
+#define key_Pin GPIO_PIN_0
+#define key_GPIO_Port GPIOB
+#define TX_EN_Pin GPIO_PIN_8
+#define TX_EN_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 #define SEGMENT_PORT GPIOA
 
@@ -82,9 +84,16 @@ void Error_Handler(void);
 #define CHECKSUM_ERROR 0
 #define CHECKSUM_NO_ERROR 1
 
+#define EVENT_RESET 0
 #define EVENT_KEY_PRESSED 1
 #define EVENT_KEY_RELEASED 2
+#define EVENT_RX_COMPLETE 3
 
+#define STATE_WAITING_REQUEST 0
+#define STATE_SENDING_RESPOND 1
+#define STATE_READ_MESSAGE 2
+
+#define SLAVE_2 //SLAVE_2
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

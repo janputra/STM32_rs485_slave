@@ -22,7 +22,6 @@
 #include "usart.h"
 #include "gpio.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "message.h"
@@ -52,33 +51,33 @@ uint8_t key_value;
 uint8_t curr_event;
 //uint8_t bufferEvent[64];
 uint8_t rx_temp;
-uint8_t start_transmission;
+uint8_t transmission_f;
 uint8_t start_cmd=0x2;
 uint8_t stop_cmd=0x3;
 circular_buffer rx_buffer;
 circular_buffer event_buffer;
 uint8_t ID;
-message TX_msg;
-message RX_msg;
-
+uint8_t TX_msg[4];
+uint8_t RX_msg[4];
+uint8_t state,event;
 int digit;
-uint8_t seven_segment_table[17] = {	0b1111110,	// '0'
-		                            	0b0110000,	// '1'
-		   	                          0b1101101,	// '2'
-			                            0b1111001,	// '3'
-			                            0b0110011,	// '4'
-			                            0b1011011,	// '5'
-			                            0b1011111,	// '6'
-			                            0b1110000,	// '7'
-			                            0b1111111,	// '8'
-			                            0b1111011,	// '9'
-			                            0b1111101,	// 'a'  --10
-			                            0b0011111,	// 'b'  --11
-			                            0b0001101,	// 'c'  --12
-			                            0b0111101,	// 'd'  --13
-			                            0b1101111,	// 'e'	--14
-			                            0b1000111,	// 'f'  --15
-			                            0b0000001 	// '-'  --16
+uint8_t seven_segment_table[17] = {	0b0111111,	// '0'
+		                            	 0b0000110,	// '1'
+		   	                           0b1011011,	// '2'
+			                             0b1001111,	// '3'
+			                             0b1100110,	// '4'
+                                   0b1101101,	// '5'
+                                   0b1111101,	// '6'
+                                   0b0000111,	// '7'
+			                             0b1111111,	// '8'
+                                   0b1101111,	// '9'
+                                   0b1011111,	// 'a'  --10
+                                   0b1111100,	// 'b'  --11
+			                             0b1011000,	// 'c'  --14
+                                   0b1011110,	// 'd'  --13
+                                   0b1111011,	// 'e'	--14
+                                   0b1110001,	// 'f'  --15
+                                   0b1000000 	// '-'  --16
 };
 
 
@@ -87,8 +86,6 @@ uint8_t seven_segment_table[17] = {	0b1111110,	// '0'
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-
-
 /* USER CODE BEGIN PFP */
 void task_timer(void);
 void seven_segment_display(char input);
@@ -139,15 +136,24 @@ int main(void)
 
   HAL_UART_Receive_IT(&huart1,&rx_temp, 1);
   /* USER CODE END 2 */
-  digit=0;
-  seven_segment_display(seven_segment_table[digit]);
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  state = STATE_WAITING_REQUEST;
+  event = EVENT_RESET;
+  digit=16;
+  seven_segment_display(seven_segment_table[digit]);
+
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+     
+      
+      task_timer();
+      key_read_task();
+      main_task();
   }
   /* USER CODE END 3 */
 }
@@ -202,7 +208,9 @@ void task_timer(void)
 
   if(d_timer_30ms==3){
     d_timer_30ms =0;
-    f_timer_10ms=1;
+    f_timer_30ms=1;
+    
+    
   }
   
 
@@ -218,58 +226,108 @@ void seven_segment_display(char input)
 void key_read_task(void)
 {
   if(!f_timer_30ms) return;
+  f_timer_30ms =0; 
+   
+ 
   unsigned char key_pindata = (uint8_t)(key_GPIO_Port->IDR & key_Pin);
-
+ 
   key_value = key_value<<1;
   key_value &= 0b00001110;
-  key_value |= (key_pindata>>key_Pin)&0x1;
-
+  key_value |= key_pindata&0X1;
+ 
   if (key_value==KEY_PRESSED){
-      buffer_push(&event_buffer,KEY_PRESSED);
+      buffer_push(&event_buffer,EVENT_KEY_PRESSED);
+      
 
   }else if(key_value==KEY_RELEASED){
-      buffer_push(&event_buffer,KEY_RELEASED);
+      buffer_push(&event_buffer,EVENT_KEY_RELEASED);
   }
 
 }
 
 void main_task(void)
 {
+  	if (event_buffer.head!=event_buffer.tail){
+		event = buffer_pop(&event_buffer);   // if there is event then get the event from buffer
+	}
 
+    switch(state)
+    {
+      case STATE_WAITING_REQUEST:
+
+            if(event == EVENT_KEY_PRESSED){
+                digit++;
+#ifdef SLAVE_1
+                
+                if (digit>9){
+                  digit=0;
+                }
+#endif
+#ifdef SLAVE_2
+                
+                if (digit>15){
+                  digit=10;
+                }
+#endif
+                seven_segment_display(seven_segment_table[digit]);
+                event = EVENT_RESET;
+                ///state = STATE_SENDING_RESPOND;
+              }
+            else if(event == EVENT_RX_COMPLETE){
+
+                state = STATE_READ_MESSAGE;
+
+            }
+      
+            break;
+      
+      case STATE_SENDING_RESPOND:
+          RS485_Send_Message();
+          state= STATE_WAITING_REQUEST;
+         
+          break;
+
+      case STATE_READ_MESSAGE:
+          RS485_Read_Message();
+          state= STATE_WAITING_REQUEST;
+          event = EVENT_RESET;
+          break;
+
+      
+
+    }
 }
 
 void RS485_Read_Message(void){
 
-  if (start_transmission) return;
+if(rx_buffer.tail==rx_buffer.head) return;
 
-  buffer_to_message(&rx_buffer, &RX_msg);
+  buffer_to_message(&rx_buffer, RX_msg);
 
-  if (check_checksum(RX_msg)==CHECKSUM_ERROR) return;
-  if (RX_msg.address != ID) return;
+ // if (check_checksum(&RX_msg)==CHECKSUM_ERROR) return;
+  if (RX_msg[0]!= ID) return;
 
-  if (RX_msg.function_code == FUNC_READ)
+
+
+   if (RX_msg[1] == FUNC_WRITE)
   {
 
+  }else if (RX_msg[1] == FUNC_READ){
+
   }
-  else if (RX_msg.function_code == FUNC_WRITE)
-  { 
-      digit = (int)RX_msg.data;
-  }
-  
 }
 
 void RS485_Send_Message(void)
 {
-
-   //uint8_t *pbuf_tx = (uint8_t *)&msg; 
-   /// Enable Transmitter Mode
+  HAL_GPIO_WritePin(TX_EN_GPIO_Port, TX_EN_Pin, 1); /// Enable Transmitter Mode
    HAL_UART_Transmit(&huart1,&start_cmd,1,10);
   
-   HAL_UART_Transmit(&huart1,(uint8_t *)&TX_msg,sizeof(TX_msg),10);
+   HAL_UART_Transmit(&huart1,TX_msg,sizeof(TX_msg),10);
 
    HAL_UART_Transmit(&huart1,&stop_cmd,1,10);
   
-   /// Enable Receiver Mode
+   HAL_GPIO_WritePin(TX_EN_GPIO_Port, TX_EN_Pin, 0); /// Enable Receiver Mode
+
 
 }
 
@@ -292,20 +350,24 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	if (huart == &huart1)
 	{ 
 
-    if (start_transmission){
-      if (!(rx_temp==0x3)){
-        buffer_push(&rx_buffer,rx_temp);
-      }
-      else{
-        start_transmission = 0;
-      }
-    }else{
-       if (rx_temp==0x2){
-        start_transmission = 1;
-      } 
-    }
+    if (rx_temp==0x2)
+		{
+				transmission_f=1;
+		}
+		else if (rx_temp==0x3)
+		{
+				transmission_f=0;
+				buffer_push(&event_buffer,EVENT_RX_COMPLETE);
+		}
+		else{
 
-    HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
+			if (transmission_f)
+			{
+				 buffer_push(&rx_buffer,rx_temp);
+			}
+		}
+
+		HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
     
   }
 }

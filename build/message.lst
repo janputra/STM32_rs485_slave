@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccsGhXtM.s 			page 1
+ARM GAS  /tmp/cceuw126.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -29,7 +29,7 @@ ARM GAS  /tmp/ccsGhXtM.s 			page 1
   27              		.file 1 "Core/Src/message.c"
    1:Core/Src/message.c **** #include "message.h"
    2:Core/Src/message.c **** 
-   3:Core/Src/message.c **** void buffer_to_message(circular_buffer* buffer, message *message)
+   3:Core/Src/message.c **** void buffer_to_message(circular_buffer* buffer, uint8_t* message)
    4:Core/Src/message.c **** {
   28              		.loc 1 4 1 view -0
   29              		.cfi_startproc
@@ -45,67 +45,116 @@ ARM GAS  /tmp/ccsGhXtM.s 			page 1
   39              		.cfi_offset 14, -4
   40 0002 0546     		mov	r5, r0
   41 0004 0C46     		mov	r4, r1
-   5:Core/Src/message.c ****     message->header = buffer_pop(buffer);
+   5:Core/Src/message.c ****     message[0] = buffer_pop(buffer);
   42              		.loc 1 5 5 is_stmt 1 view .LVU2
-  43              		.loc 1 5 23 is_stmt 0 view .LVU3
+  43              		.loc 1 5 18 is_stmt 0 view .LVU3
   44 0006 FFF7FEFF 		bl	buffer_pop
   45              	.LVL1:
-  46              		.loc 1 5 21 view .LVU4
+  46              		.loc 1 5 16 view .LVU4
   47 000a 2070     		strb	r0, [r4]
-   6:Core/Src/message.c ****     message->address = buffer_pop(buffer);
+   6:Core/Src/message.c ****     message[1] = buffer_pop(buffer);
   48              		.loc 1 6 5 is_stmt 1 view .LVU5
-  49              		.loc 1 6 24 is_stmt 0 view .LVU6
+  49              		.loc 1 6 18 is_stmt 0 view .LVU6
   50 000c 2846     		mov	r0, r5
   51 000e FFF7FEFF 		bl	buffer_pop
   52              	.LVL2:
-ARM GAS  /tmp/ccsGhXtM.s 			page 2
+ARM GAS  /tmp/cceuw126.s 			page 2
 
 
-  53              		.loc 1 6 22 view .LVU7
+  53              		.loc 1 6 16 view .LVU7
   54 0012 6070     		strb	r0, [r4, #1]
-   7:Core/Src/message.c ****     message->function_code = buffer_pop(buffer);
+   7:Core/Src/message.c ****     message[2] = buffer_pop(buffer);
   55              		.loc 1 7 5 is_stmt 1 view .LVU8
-  56              		.loc 1 7 30 is_stmt 0 view .LVU9
+  56              		.loc 1 7 18 is_stmt 0 view .LVU9
   57 0014 2846     		mov	r0, r5
   58 0016 FFF7FEFF 		bl	buffer_pop
   59              	.LVL3:
-  60              		.loc 1 7 28 view .LVU10
+  60              		.loc 1 7 16 view .LVU10
   61 001a A070     		strb	r0, [r4, #2]
-   8:Core/Src/message.c ****     message->data= buffer_pop(buffer);
+   8:Core/Src/message.c ****     message[3] = buffer_pop(buffer);
   62              		.loc 1 8 5 is_stmt 1 view .LVU11
-  63              		.loc 1 8 20 is_stmt 0 view .LVU12
+  63              		.loc 1 8 18 is_stmt 0 view .LVU12
   64 001c 2846     		mov	r0, r5
   65 001e FFF7FEFF 		bl	buffer_pop
   66              	.LVL4:
-  67              		.loc 1 8 18 view .LVU13
+  67              		.loc 1 8 16 view .LVU13
   68 0022 E070     		strb	r0, [r4, #3]
-   9:Core/Src/message.c ****     message->checksum = buffer_pop(buffer);
-  69              		.loc 1 9 5 is_stmt 1 view .LVU14
-  70              		.loc 1 9 25 is_stmt 0 view .LVU15
-  71 0024 2846     		mov	r0, r5
-  72 0026 FFF7FEFF 		bl	buffer_pop
-  73              	.LVL5:
-  74              		.loc 1 9 23 view .LVU16
-  75 002a 2071     		strb	r0, [r4, #4]
+   9:Core/Src/message.c **** }
+  69              		.loc 1 9 1 view .LVU14
+  70 0024 38BD     		pop	{r3, r4, r5, pc}
+  71              		.loc 1 9 1 view .LVU15
+  72              		.cfi_endproc
+  73              	.LFE65:
+  75              		.section	.text.cal_checksum,"ax",%progbits
+  76              		.align	1
+  77              		.global	cal_checksum
+  78              		.syntax unified
+  79              		.thumb
+  80              		.thumb_func
+  81              		.fpu softvfp
+  83              	cal_checksum:
+  84              	.LVL5:
+  85              	.LFB66:
   10:Core/Src/message.c **** 
-  11:Core/Src/message.c **** }...
-  76              		.loc 1 11 1 view .LVU17
-  77 002c 38BD     		pop	{r3, r4, r5, pc}
-  78              		.loc 1 11 1 view .LVU18
-  79              		.cfi_endproc
-  80              	.LFE65:
-  82              		.text
-  83              	.Letext0:
-  84              		.file 2 "Core/Inc/buffer.h"
-  85              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
-  86              		.file 4 "Core/Inc/message.h"
-ARM GAS  /tmp/ccsGhXtM.s 			page 3
+  11:Core/Src/message.c **** void cal_checksum(uint8_t *msg)
+  12:Core/Src/message.c **** {
+  86              		.loc 1 12 1 is_stmt 1 view -0
+  87              		.cfi_startproc
+  88              		@ args = 0, pretend = 0, frame = 0
+  89              		@ frame_needed = 0, uses_anonymous_args = 0
+  90              		@ link register save eliminated.
+  13:Core/Src/message.c **** 
+  14:Core/Src/message.c **** }
+  91              		.loc 1 14 1 view .LVU17
+  92 0000 7047     		bx	lr
+  93              		.cfi_endproc
+  94              	.LFE66:
+  96              		.section	.text.check_checksum,"ax",%progbits
+  97              		.align	1
+  98              		.global	check_checksum
+  99              		.syntax unified
+ 100              		.thumb
+ 101              		.thumb_func
+ 102              		.fpu softvfp
+ 104              	check_checksum:
+ 105              	.LVL6:
+ARM GAS  /tmp/cceuw126.s 			page 3
+
+
+ 106              	.LFB67:
+  15:Core/Src/message.c **** 
+  16:Core/Src/message.c **** uint8_t check_checksum(uint8_t *msg)
+  17:Core/Src/message.c **** {
+ 107              		.loc 1 17 1 view -0
+ 108              		.cfi_startproc
+ 109              		@ args = 0, pretend = 0, frame = 0
+ 110              		@ frame_needed = 0, uses_anonymous_args = 0
+ 111              		@ link register save eliminated.
+  18:Core/Src/message.c **** return 1;
+ 112              		.loc 1 18 1 view .LVU19
+  19:Core/Src/message.c **** }...
+ 113              		.loc 1 19 1 is_stmt 0 view .LVU20
+ 114 0000 0120     		movs	r0, #1
+ 115              	.LVL7:
+ 116              		.loc 1 19 1 view .LVU21
+ 117 0002 7047     		bx	lr
+ 118              		.cfi_endproc
+ 119              	.LFE67:
+ 121              		.text
+ 122              	.Letext0:
+ 123              		.file 2 "Core/Inc/buffer.h"
+ 124              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ARM GAS  /tmp/cceuw126.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 message.c
-     /tmp/ccsGhXtM.s:16     .text.buffer_to_message:0000000000000000 $t
-     /tmp/ccsGhXtM.s:24     .text.buffer_to_message:0000000000000000 buffer_to_message
+     /tmp/cceuw126.s:16     .text.buffer_to_message:0000000000000000 $t
+     /tmp/cceuw126.s:24     .text.buffer_to_message:0000000000000000 buffer_to_message
+     /tmp/cceuw126.s:76     .text.cal_checksum:0000000000000000 $t
+     /tmp/cceuw126.s:83     .text.cal_checksum:0000000000000000 cal_checksum
+     /tmp/cceuw126.s:97     .text.check_checksum:0000000000000000 $t
+     /tmp/cceuw126.s:104    .text.check_checksum:0000000000000000 check_checksum
 
 UNDEFINED SYMBOLS
 buffer_pop
