@@ -44,12 +44,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint8_t f_busy;
 uint8_t f_timer_10ms=0;
 uint8_t f_timer_30ms=0;
 uint8_t d_timer_30ms;
 uint8_t key_value;
 uint8_t curr_event;
 //uint8_t bufferEvent[64];
+uint8_t read_res;
 uint8_t rx_temp;
 uint8_t transmission_f;
 uint8_t start_cmd=0x2;
@@ -92,7 +94,7 @@ void seven_segment_display(char input);
 void key_read_task(void);
 void main_task(void);
 void RS485_Send_Message(void);
-void RS485_Read_Message(void);
+uint8_t RS485_Read_Message(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -134,11 +136,19 @@ int main(void)
   
   HAL_TIM_Base_Start_IT(&htim1);  
 
-  HAL_UART_Receive_IT(&huart1,&rx_temp, 1);
+ 	HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+#ifdef SLAVE_1
+                
+  ID =0x1;
+#endif
+#ifdef SLAVE_2
+                
+  ID=0x2;
+#endif
   state = STATE_WAITING_REQUEST;
   event = EVENT_RESET;
   digit=16;
@@ -248,8 +258,10 @@ void key_read_task(void)
 void main_task(void)
 {
   	if (event_buffer.head!=event_buffer.tail){
-		event = buffer_pop(&event_buffer);   // if there is event then get the event from buffer
-	}
+      if(!f_busy){
+		  event = buffer_pop(&event_buffer);   // if there is event then get the event from buffer
+      }
+  }
 
     switch(state)
     {
@@ -269,12 +281,14 @@ void main_task(void)
                   digit=10;
                 }
 #endif
+               
                 seven_segment_display(seven_segment_table[digit]);
                 event = EVENT_RESET;
                 ///state = STATE_SENDING_RESPOND;
               }
             else if(event == EVENT_RX_COMPLETE){
-
+                
+                f_busy=1;
                 state = STATE_READ_MESSAGE;
 
             }
@@ -284,12 +298,20 @@ void main_task(void)
       case STATE_SENDING_RESPOND:
           RS485_Send_Message();
           state= STATE_WAITING_REQUEST;
-         
+          f_busy=0;
           break;
 
       case STATE_READ_MESSAGE:
-          RS485_Read_Message();
-          state= STATE_WAITING_REQUEST;
+          read_res= RS485_Read_Message();
+          if (read_res==MSG_READ_REQ){
+              
+              state=STATE_SENDING_RESPOND;
+          }
+          else {
+            f_busy=0;
+               state= STATE_WAITING_REQUEST;
+          }
+         
           event = EVENT_RESET;
           break;
 
@@ -298,28 +320,40 @@ void main_task(void)
     }
 }
 
-void RS485_Read_Message(void){
+uint8_t RS485_Read_Message(void){
 
-if(rx_buffer.tail==rx_buffer.head) return;
+  if (rx_buffer.tail==rx_buffer.head) return MSG_ERROR;
 
   buffer_to_message(&rx_buffer, RX_msg);
 
- // if (check_checksum(&RX_msg)==CHECKSUM_ERROR) return;
-  if (RX_msg[0]!= ID) return;
+ // if (check_checksum(&RX_msg)==CHECKSUM_ERROR) return 0;
+  if (RX_msg[0]!= ID) return MSG_ERROR;
 
 
 
    if (RX_msg[1] == FUNC_WRITE)
   {
+      digit = RX_msg[2];
+      seven_segment_display(seven_segment_table[digit]);
+      return MSG_WRITE_REQ;
 
   }else if (RX_msg[1] == FUNC_READ){
 
+
+      return MSG_READ_REQ;
   }
+
+
 }
 
 void RS485_Send_Message(void)
 {
-  HAL_GPIO_WritePin(TX_EN_GPIO_Port, TX_EN_Pin, 1); /// Enable Transmitter Mode
+   TX_msg[0]= ID;
+   TX_msg[1]= RX_msg[1];
+   TX_msg[2]= digit;
+
+   HAL_GPIO_WritePin(TX_EN_GPIO_Port, TX_EN_Pin, 1); /// Enable Transmitter Mode
+  
    HAL_UART_Transmit(&huart1,&start_cmd,1,10);
   
    HAL_UART_Transmit(&huart1,TX_msg,sizeof(TX_msg),10);
@@ -349,13 +383,20 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 	if (huart == &huart1)
 	{ 
-
+    digit=0;   
+                seven_segment_display(seven_segment_table[digit]);
+				transmission_f=1;
+                      
     if (rx_temp==0x2)
 		{
+      digit=1;   
+                seven_segment_display(seven_segment_table[digit]);
 				transmission_f=1;
 		}
 		else if (rx_temp==0x3)
 		{
+      digit=2;   
+                seven_segment_display(seven_segment_table[digit]);
 				transmission_f=0;
 				buffer_push(&event_buffer,EVENT_RX_COMPLETE);
 		}
