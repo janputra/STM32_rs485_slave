@@ -10,10 +10,25 @@ void buffer_to_message(circular_buffer* buffer, uint8_t* message)
 
 void cal_checksum(uint8_t *msg)
 {
-
+    uint8_t temp=0;
+    for (int i=0;i<3;i++)
+    {
+        temp ^= msg[i];
+    }
+    msg[3]= temp;
 }
 
 uint8_t check_checksum(uint8_t *msg)
 {
-return 1;
+    uint8_t temp=0;
+    for (int i=0;i<3;i++)
+    {
+        temp ^= msg[i];
+    }
+
+    if (temp!= msg[3]){
+        return 0;
+    }
+
+    return 1;
 }

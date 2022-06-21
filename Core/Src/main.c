@@ -143,11 +143,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 #ifdef SLAVE_1
                 
-  ID =0x1;
+  ID =0x10;
 #endif
 #ifdef SLAVE_2
                 
-  ID=0x2;
+  ID=0x20;
 #endif
   state = STATE_WAITING_REQUEST;
   event = EVENT_RESET;
@@ -290,6 +290,7 @@ void main_task(void)
                 
                 f_busy=1;
                 state = STATE_READ_MESSAGE;
+                event = EVENT_RESET;
 
             }
       
@@ -307,42 +308,50 @@ void main_task(void)
               
               state=STATE_SENDING_RESPOND;
           }
-          else {
-            f_busy=0;
+          else if(read_res==MSG_WRITE_REQ){
+               f_busy=0;
+               digit = RX_msg[2]-'0';
+               seven_segment_display(seven_segment_table[digit]);
                state= STATE_WAITING_REQUEST;
+               
+          }/*else if(read_res==MSG_ERROR){
+                f_busy=0;
+                digit=16;
+                seven_segment_display(seven_segment_table[digit]);
+                state= STATE_WAITING_REQUEST;;
+              
           }
-         
-          event = EVENT_RESET;
-          break;
-
-      
+          */else{
+            f_busy=0;
+            state= STATE_WAITING_REQUEST;
+          
+          }
+          
+          break;    
 
     }
 }
 
 uint8_t RS485_Read_Message(void){
 
-  if (rx_buffer.tail==rx_buffer.head) return MSG_ERROR;
+  if (rx_buffer.tail==rx_buffer.head) return MSG_NO_PROCESS;
 
   buffer_to_message(&rx_buffer, RX_msg);
 
- // if (check_checksum(&RX_msg)==CHECKSUM_ERROR) return 0;
-  if (RX_msg[0]!= ID) return MSG_ERROR;
+  if (check_checksum(RX_msg)==CHECKSUM_ERROR) return MSG_ERROR;
+  
+  if (RX_msg[0]!= ID) return MSG_NO_PROCESS;
 
-
-
-   if (RX_msg[1] == FUNC_WRITE)
+  if (RX_msg[1] == FUNC_WRITE)
   {
-      digit = RX_msg[2];
-      seven_segment_display(seven_segment_table[digit]);
-      return MSG_WRITE_REQ;
+       return MSG_WRITE_REQ;
 
   }else if (RX_msg[1] == FUNC_READ){
 
-
       return MSG_READ_REQ;
   }
-
+    
+    return MSG_NO_PROCESS;
 
 }
 
@@ -350,7 +359,9 @@ void RS485_Send_Message(void)
 {
    TX_msg[0]= ID;
    TX_msg[1]= RX_msg[1];
-   TX_msg[2]= digit;
+   TX_msg[2]= digit+'0';
+
+   cal_checksum(TX_msg);
 
    HAL_GPIO_WritePin(TX_EN_GPIO_Port, TX_EN_Pin, 1); /// Enable Transmitter Mode
   
@@ -363,7 +374,7 @@ void RS485_Send_Message(void)
    HAL_GPIO_WritePin(TX_EN_GPIO_Port, TX_EN_Pin, 0); /// Enable Receiver Mode
 
 
-}
+} 
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
@@ -382,31 +393,24 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	//HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 
 	if (huart == &huart1)
-	{ 
-    digit=0;   
-                seven_segment_display(seven_segment_table[digit]);
+	{                      
+    if(!transmission_f){
+			if (rx_temp==0x2){
 				transmission_f=1;
-                      
-    if (rx_temp==0x2)
-		{
-      digit=1;   
-                seven_segment_display(seven_segment_table[digit]);
-				transmission_f=1;
-		}
-		else if (rx_temp==0x3)
-		{
-      digit=2;   
-                seven_segment_display(seven_segment_table[digit]);
+			}
+
+		}else{
+			if (rx_temp==0x3)
+			{		//digit1= 2;
 				transmission_f=0;
 				buffer_push(&event_buffer,EVENT_RX_COMPLETE);
-		}
-		else{
-
-			if (transmission_f)
-			{
-				 buffer_push(&rx_buffer,rx_temp);
+				HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
+				return;
 			}
+
+ 			buffer_push(&rx_buffer,rx_temp);
 		}
+
 
 		HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
     

@@ -92,10 +92,12 @@ void Error_Handler(void);
 #define STATE_WAITING_REQUEST 0
 #define STATE_SENDING_RESPOND 1
 #define STATE_READ_MESSAGE 2
+#define STATE_ERROR_HANDLER 3
 
 #define MSG_ERROR 0
 #define MSG_WRITE_REQ 1
 #define MSG_READ_REQ 2
+#define MSG_NO_PROCESS 3
 
 #define SLAVE_2 //SLAVE_2
 /* USER CODE END Private defines */
