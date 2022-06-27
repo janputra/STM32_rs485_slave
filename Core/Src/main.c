@@ -94,7 +94,7 @@ void seven_segment_display(char input);
 void key_read_task(void);
 void main_task(void);
 void RS485_Send_Message(void);
-uint8_t RS485_Read_Message(void);
+void RS485_Read_Message(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -141,15 +141,9 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-#ifdef SLAVE_1
-                
-  ID =0x10;
-#endif
-#ifdef SLAVE_2
-                
-  ID=0x20;
-#endif
-  state = STATE_WAITING_REQUEST;
+  ID=0x10;
+
+  state = STATE_WAITING_ADDR;
   event = EVENT_RESET;
   digit=16;
   seven_segment_display(seven_segment_table[digit]);
@@ -263,78 +257,75 @@ void main_task(void)
 
   }
 
-    if(event == EVENT_KEY_PRESSED){
-          digit++;
-#ifdef SLAVE_1
-                
-          if (digit>9){
-               digit=0;
-             }
-#endif
-#ifdef SLAVE_2
-                
-          if (digit>15){
-               digit=10;
-            }
-#endif
-               
-            seven_segment_display(seven_segment_table[digit]);
-            RS485_Send_Message();
-            event = EVENT_RESET;
-          
-          }
-        else if(event == EVENT_RX_COMPLETE){
+  switch (state)
+  {
+  case STATE_WAITING_ADDR:
+
+      if (event==EVENT_RX_COMPLETE){
+
+        RS485_Read_Message();
+      }
+
+  
+    break;
+  
+  case STATE_OPERATION:
+     if(event == EVENT_KEY_PRESSED){
+      digit++;
+      #ifdef SLAVE_1
             
-                  read_res= RS485_Read_Message();
-                  if (read_res==MSG_READ_REQ){
-                    
-                    state=STATE_SENDING_RESPOND;
-                }
-                else if(read_res==MSG_WRITE_REQ){
-                    f_busy=0;
-                    digit = RX_msg[2]-'0';
-                    seven_segment_display(seven_segment_table[digit]);
-                    state= STATE_WAITING_REQUEST;
-                    
-                }/*else if(read_res==MSG_ERROR){
-                      f_busy=0;
-                      digit=16;
-                      seven_segment_display(seven_segment_table[digit]);
-                      state= STATE_WAITING_REQUEST;;
-                    
-                }
-                */else{
-                  f_busy=0;
-                  state= STATE_WAITING_REQUEST;
-      
-                }
-      
-            event = EVENT_RESET;
+      if (digit>9){
+            digit=0;
+          }
+      #endif
+      #ifdef SLAVE_2
+            
+      if (digit>15){
+            digit=10;
         }
+      #endif
+            
+        seven_segment_display(seven_segment_table[digit]);
+        //RS485_Send_Message();
+        event = EVENT_RESET;
+      
+      }
+    else if(event == EVENT_RX_COMPLETE){
+            
+      RS485_Read_Message();
+      event = EVENT_RESET;
+                    
+    }
+  
+    break;
+  }
 
-
+ 
 }
 
-uint8_t RS485_Read_Message(void){
+void RS485_Read_Message(void){
 
-  if (rx_buffer.tail==rx_buffer.head) return MSG_NO_PROCESS;
+  if (rx_buffer.tail==rx_buffer.head) return ;
 
   buffer_to_message(&rx_buffer, RX_msg);
 
-  if (check_checksum(RX_msg)==CHECKSUM_ERROR) return MSG_ERROR;
+  if (check_checksum(RX_msg)==CHECKSUM_ERROR) return ;
   
-  if (RX_msg[0]!= ID) return MSG_NO_PROCESS;
+  if (RX_msg[0]!= ID) return;
 
   if (RX_msg[1] == FUNC_WRITE)
   {
-       return MSG_WRITE_REQ;
+         digit = RX_msg[2]-'0';
+         seven_segment_display(seven_segment_table[digit]);
 
   }else if (RX_msg[1] == FUNC_READ){
 
-      return MSG_READ_REQ;
+      RS485_Send_Message();
+
+  }else if(RX_msg[1]== FUNC_ASSIGN_ADDR){
+        ID = RX_msg[2];
+        seven_segment_display(seven_segment_table[(ID&0x1)]);
   }
-    
-    return MSG_NO_PROCESS;
 
 }
 
