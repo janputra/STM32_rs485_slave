@@ -136,17 +136,21 @@ int main(void)
   
   HAL_TIM_Base_Start_IT(&htim1);  
 
- 	HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
+ 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   ID=0x10;
-
+  uint32_t rand= HAL_GetTick();
+  rand = rand & 0x00FF;
   state = STATE_WAITING_ADDR;
   event = EVENT_RESET;
   digit=16;
   seven_segment_display(seven_segment_table[digit]);
+  
+  HAL_Delay(rand);
+  HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
 
   while (1)
   {
@@ -262,8 +266,9 @@ void main_task(void)
   case STATE_WAITING_ADDR:
 
       if (event==EVENT_RX_COMPLETE){
-
+       
         RS485_Read_Message();
+        event = EVENT_RESET;
       }
 
   
@@ -286,8 +291,7 @@ void main_task(void)
       #endif
             
         seven_segment_display(seven_segment_table[digit]);
-        //RS485_Send_Message();
-        event = EVENT_RESET;
+         event = EVENT_RESET;
       
       }
     else if(event == EVENT_RX_COMPLETE){
@@ -305,7 +309,6 @@ void main_task(void)
 
 void RS485_Read_Message(void){
 
-  if (rx_buffer.tail==rx_buffer.head) return ;
 
   buffer_to_message(&rx_buffer, RX_msg);
 
@@ -320,13 +323,15 @@ void RS485_Read_Message(void){
 
   }else if (RX_msg[1] == FUNC_READ){
 
-      RS485_Send_Message();
+    
+        RS485_Send_Message();
 
   }else if(RX_msg[1]== FUNC_ASSIGN_ADDR){
+        //seven_segment_display(seven_segment_table[2]);
         ID = RX_msg[2];
-        seven_segment_display(seven_segment_table[(ID&0x1)]);
+        seven_segment_display(seven_segment_table[(ID&0xF)]);
+        state = STATE_OPERATION;
   }
-
 }
 
 void RS485_Send_Message(void)

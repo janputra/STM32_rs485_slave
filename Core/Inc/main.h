@@ -97,7 +97,7 @@ void Error_Handler(void);
 #define MSG_READ_REQ 2
 #define MSG_NO_PROCESS 3
 
-#define SLAVE_2 //SLAVE_2
+#define SLAVE_1 //SLAVE_2
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
