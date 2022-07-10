@@ -60,6 +60,7 @@ buffer_tx_msg tx_buffer;
 circular_buffer rx_buffer;
 circular_buffer event_buffer;
 uint8_t ID;
+uint8_t RAND_NUM;
 uint8_t TX_msg[6];
 uint8_t RX_msg[4];
 uint8_t *pRX_msg;
@@ -147,12 +148,16 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  /*
   #ifdef SLAVE_1 
   ID=0x10;
   #endif
   #ifdef SLAVE_2
   ID=0x12;
   #endif
+  */
+
+  ID = 0xFF;
 
   uint32_t rand= HAL_GetTick();
   rand = rand & 0x00FF;
@@ -273,46 +278,80 @@ void main_task(void)
 
   }
 
-  switch (event)
+
+
+  switch (state)
   {
-  case EVENT_KEY_PRESSED:
-    digit=(digit+1)>9? 0 :digit+1;
-    seven_segment_display(seven_segment_table[digit]);
+  case STATE_WAITING_ADDR:
 
-    event=EVENT_RESET;
+    if (event == EVENT_RX_COMPLETE){
+      RS485_Read_Message();
+      event=EVENT_RESET;
+    }
+    else if(event == EVENT_MASTER_FOUND){
+    
+        pTX_msg = &TX_msg[1];
+
+        *pTX_msg++ = ID;
+        ID = RAND_NUM;
+        *pTX_msg++ = FUNC_FIND_SLAVE;
+        *pTX_msg++ = ID;
+        RS485_Send_Message();
+        event = EVENT_RESET;
+
+        state = STATE_OPERATION;
+    }
     break;
-  
-  case EVENT_RX_COMPLETE:
-    RS485_Read_Message();
-    event=EVENT_RESET;
+
+
+  case STATE_OPERATION:
+    switch (event)
+    {
+    case EVENT_KEY_PRESSED:
+      digit=(digit+1)>9? 0 :digit+1;
+      seven_segment_display(seven_segment_table[digit]);
+
+      event=EVENT_RESET;
+      break;
+    
+    case EVENT_RX_COMPLETE:
+      RS485_Read_Message();
+      event=EVENT_RESET;
+      break;
+    case EVENT_DATA_REQUEST:
+        
+        pTX_msg = &TX_msg[1];
+
+        *pTX_msg++ = ID;
+        *pTX_msg++ = FUNC_READ;
+        *pTX_msg++ = digit+'0';
+        RS485_Send_Message();
+        event = EVENT_RESET;
+      break;
+
+    case EVENT_DATA_WRITE:
+        
+        pTX_msg = &TX_msg[1];
+
+        *pTX_msg++ = ID;
+        *pTX_msg++ = FUNC_WRITE;
+        *pTX_msg++ = '0';
+        RS485_Send_Message();
+        event = EVENT_RESET;
+      break;
+
+    default:
+
+      break;
+    }
+
     break;
-  case EVENT_DATA_REQUEST:
-      
-      pTX_msg = &TX_msg[1];
-
-      *pTX_msg++ = ID;
-			*pTX_msg++ = FUNC_READ;
-			*pTX_msg++ = digit+'0';
-      RS485_Send_Message();
-      event = EVENT_RESET;
-     break;
-
-  case EVENT_DATA_WRITE:
-      
-      pTX_msg = &TX_msg[1];
-
-      *pTX_msg++ = ID;
-			*pTX_msg++ = FUNC_WRITE;
-			*pTX_msg++ = '0';
-      RS485_Send_Message();
-      event = EVENT_RESET;
-     break;
-
   default:
-
     break;
   }
 
+
+  
 
 
 }
@@ -363,8 +402,8 @@ void RS485_Read_Message(void){
 
 	}
   
-  if (RX_msg[0]!= ID) return;
-  
+  if (RX_msg[0]== ID) return;
+  {}
   if (RX_msg[1] == FUNC_WRITE)
   {    
          digit = RX_msg[2]-'0';
@@ -375,7 +414,9 @@ void RS485_Read_Message(void){
          
         buffer_push(&event_buffer, EVENT_DATA_REQUEST);
         //RS485_Send_Message();
-
+  
+  }else if(RX_msg[1]== FUNC_FIND_SLAVE){
+       buffer_push(&event_buffer, EVENT_MASTER_FOUND);
   }
 }
 

@@ -90,6 +90,7 @@ void Error_Handler(void);
 #define EVENT_RX_COMPLETE 3
 #define EVENT_DATA_REQUEST 4
 #define EVENT_DATA_WRITE 5
+#define EVENT_MASTER_FOUND 6
 
 #define STATE_WAITING_ADDR 0
 #define STATE_OPERATION 1
@@ -104,7 +105,7 @@ void Error_Handler(void);
 #define FUNC_WRITE 0xF1
 #define FUNC_READ 0xF2
 #define FUNC_RESEND 0xF3
-#define FUNC_ASSIGN_ADDR 0xF4
+#define FUNC_FIND_SLAVE 0xF4
 
 #define SLAVE_1 //SLAVE_2
 /* USER CODE END Private defines */

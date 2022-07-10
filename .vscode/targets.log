@@ -6,11 +6,10 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Jul 10 21:09:13 2022
+# Make data base, printed on Sun Jul 10 21:14:44 2022
 
 # Variables
 
- 
 # environment
 GDK_BACKEND = x11
 # makefile (from 'Makefile', line 81)
@@ -108,7 +107,7 @@ ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffuncti
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 212019
+VSCODE_PID = 216022
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -292,6 +291,7 @@ LC_IDENTIFICATION = en_US.UTF-8
 # Drivers/STM32F1xx_HAL_Driver/Src (device 66306, inode 13766668): No files, no impossibilities so far.
 
 # 92 files, no impossibilities in 4 directories.
+ 
 
 # Implicit Rules
 
@@ -352,7 +352,6 @@ Core/Inc/main.h:
 #  File has been updated.
 #  Successfully updated.
 
- 
 # Not a target:
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c:
 #  Implicit rule search has not been done.
@@ -376,6 +375,7 @@ build/stm32f1xx_hal_gpio.o: Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.
 #  File has not been updated.
 
 Core/Inc/message.h:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -564,7 +564,6 @@ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:
 #  Last modified 2022-06-19 23:12:10.398007731
 #  File has been updated.
 #  Successfully updated.
- 
 
 # Not a target:
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c:
@@ -647,6 +646,7 @@ build/stm32f1xx_hal_gpio.d:
 # Not a target:
 build/system_stm32f1xx.d:
 #  Implicit rule search has been done.
+ 
 #  Last modified 2022-06-19 23:12:24.294218142
 #  File has been updated.
 #  Successfully updated.
@@ -772,7 +772,6 @@ Core/Inc/gpio.h:
 
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h:
 #  Implicit rule search has been done.
- 
 #  Last modified 2022-06-19 23:12:10.398007731
 #  File has been updated.
 #  Successfully updated.
@@ -791,6 +790,7 @@ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h:
 
 Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h:
 #  Implicit rule search has been done.
+ 
 #  Last modified 2022-06-19 23:12:11.7260283
 #  File has been updated.
 #  Successfully updated.
@@ -919,7 +919,6 @@ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h:
 build/stm32f1xx_hal_flash.o: Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h Core/Inc/stm32f1xx_hal_conf.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h Drivers/CMSIS/Include/core_cm3.h Drivers/CMSIS/Include/cmsis_version.h Drivers/CMSIS/Include/cmsis_compiler.h Drivers/CMSIS/Include/cmsis_gcc.h Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h Drivers/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_exti.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
 
 # Not a target:
@@ -1041,6 +1040,6 @@ vpath %.c Core/Src:Drivers/STM32F1xx_HAL_Driver/Src
 # strcache performance: lookups = 2071 / hit rate = 89%
 # hash-table stats:
 # Load=212/8192=3%, Rehash=0, Collisions=70/2071=3%
-# Finished Make data base on Sun Jul 10 21:09:13 2022
+# Finished Make data base on Sun Jul 10 21:14:44 2022
 
  
