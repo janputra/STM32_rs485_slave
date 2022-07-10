@@ -22,8 +22,7 @@ build/main.o: Core/Src/main.c Core/Inc/main.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h Core/Inc/tim.h \
- Core/Inc/main.h Core/Inc/usart.h Core/Inc/gpio.h Core/Inc/message.h \
- Core/Inc/buffer.h
+ Core/Inc/main.h Core/Inc/usart.h Core/Inc/gpio.h Core/Inc/buffer.h
 Core/Inc/main.h:
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 Core/Inc/stm32f1xx_hal_conf.h:
@@ -54,5 +53,4 @@ Core/Inc/tim.h:
 Core/Inc/main.h:
 Core/Inc/usart.h:
 Core/Inc/gpio.h:
-Core/Inc/message.h:
 Core/Inc/buffer.h:

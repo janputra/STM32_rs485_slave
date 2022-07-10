@@ -88,6 +88,8 @@ void Error_Handler(void);
 #define EVENT_KEY_PRESSED 1
 #define EVENT_KEY_RELEASED 2
 #define EVENT_RX_COMPLETE 3
+#define EVENT_DATA_REQUEST 4
+#define EVENT_DATA_WRITE 5
 
 #define STATE_WAITING_ADDR 0
 #define STATE_OPERATION 1
@@ -96,6 +98,13 @@ void Error_Handler(void);
 #define MSG_WRITE_REQ 1
 #define MSG_READ_REQ 2
 #define MSG_NO_PROCESS 3
+#define SOF 0x2
+#define EOF 0x3
+
+#define FUNC_WRITE 0xF1
+#define FUNC_READ 0xF2
+#define FUNC_RESEND 0xF3
+#define FUNC_ASSIGN_ADDR 0xF4
 
 #define SLAVE_1 //SLAVE_2
 /* USER CODE END Private defines */

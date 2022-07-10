@@ -3,22 +3,14 @@
 void buffer_push(circular_buffer *buffer, uint8_t input)
 {   
     buffer->data[buffer->head]=input;
-    buffer->head++;
-    
-    if (buffer->head>63){
-        buffer->head=0;
-    }
-
+    buffer->head = (buffer->head+1)%BUFFER_SIZE;
+  
 }
 
 uint8_t buffer_pop(circular_buffer *buffer)
 {
     uint8_t buf_data = buffer->data[buffer->tail];
-    buffer->tail++;
-
-     if (buffer->tail>63){
-        buffer->tail=0;
-    }
+    buffer->tail= (buffer->tail+1)%BUFFER_SIZE;
     return buf_data;
 
 
