@@ -92,7 +92,7 @@ void Error_Handler(void);
 #define EVENT_DATA_WRITE 5
 #define EVENT_MASTER_FOUND 6
 
-#define STATE_WAITING_ADDR 0
+#define STATE_WAITING_MASTER 0
 #define STATE_OPERATION 1
 
 #define MSG_ERROR 0
@@ -106,6 +106,8 @@ void Error_Handler(void);
 #define FUNC_READ 0xF2
 #define FUNC_RESEND 0xF3
 #define FUNC_FIND_SLAVE 0xF4
+
+#define COMPUTE_BUILD_SEC  ((__TIME__[6] - '0') * 10 + __TIME__[7] - '0')
 
 #define SLAVE_1 //SLAVE_2
 /* USER CODE END Private defines */

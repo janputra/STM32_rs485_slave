@@ -44,6 +44,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+uint16_t* unique_id;
 uint8_t f_busy;
 uint8_t f_read_msg;
 uint8_t f_timer_10ms=0;
@@ -60,7 +61,6 @@ buffer_tx_msg tx_buffer;
 circular_buffer rx_buffer;
 circular_buffer event_buffer;
 uint8_t ID;
-uint8_t RAND_NUM;
 uint8_t TX_msg[6];
 uint8_t RX_msg[4];
 uint8_t *pRX_msg;
@@ -158,24 +158,24 @@ int main(void)
   */
 
   ID = 0xFF;
+  unique_id =(uint16_t *)(0x1FFFF7E8);
+  uint32_t rand= COMPUTE_BUILD_SEC*100; 
+  
+  state = STATE_WAITING_MASTER;
 
-  uint32_t rand= HAL_GetTick();
-  rand = rand & 0x00FF;
-  state = STATE_WAITING_ADDR;
-  event = EVENT_RESET;
-  digit=16;
-  seven_segment_display(seven_segment_table[digit]);
   
   HAL_Delay(rand);
   HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
-
+  
+  digit=16;
+  seven_segment_display(seven_segment_table[digit]);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
      
-      
+     //seven_segment_display(seven_segment_table[0]);
       task_timer();
       key_read_task();
 
@@ -282,18 +282,19 @@ void main_task(void)
 
   switch (state)
   {
-  case STATE_WAITING_ADDR:
+  case STATE_WAITING_MASTER:
 
     if (event == EVENT_RX_COMPLETE){
+     // seven_segment_display(seven_segment_table[10]);
       RS485_Read_Message();
       event=EVENT_RESET;
     }
     else if(event == EVENT_MASTER_FOUND){
-    
+       // seven_segment_display(seven_segment_table[11]);
         pTX_msg = &TX_msg[1];
 
         *pTX_msg++ = ID;
-        ID = RAND_NUM;
+        ID = (uint8_t)(*unique_id&0xFF);
         *pTX_msg++ = FUNC_FIND_SLAVE;
         *pTX_msg++ = ID;
         RS485_Send_Message();
@@ -340,18 +341,12 @@ void main_task(void)
         event = EVENT_RESET;
       break;
 
-    default:
-
-      break;
     }
 
     break;
-  default:
-    break;
+ 
   }
 
-
-  
 
 
 }
@@ -402,8 +397,8 @@ void RS485_Read_Message(void){
 
 	}
   
-  if (RX_msg[0]== ID) return;
-  {}
+  if (RX_msg[0]!= ID) return;
+  
   if (RX_msg[1] == FUNC_WRITE)
   {    
          digit = RX_msg[2]-'0';
@@ -451,7 +446,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 	if (huart == &huart1)
 	{                      
-    
+    //seven_segment_display(seven_segment_table[12]);
     buffer_push(&rx_buffer,rx_temp);
 		HAL_UART_Receive_IT(&huart1, &rx_temp, 1);
     
