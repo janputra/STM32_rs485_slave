@@ -1,28 +1,28 @@
-ARM GAS  /tmp/cc2rx2ID.s 			page 1
+ARM GAS  /tmp/ccJj3SjR.s 			page 1
 
 
    1              		.cpu cortex-m3
-   2              		.eabi_attribute 20, 1
-   3              		.eabi_attribute 21, 1
-   4              		.eabi_attribute 23, 3
-   5              		.eabi_attribute 24, 1
-   6              		.eabi_attribute 25, 1
-   7              		.eabi_attribute 26, 1
-   8              		.eabi_attribute 30, 1
-   9              		.eabi_attribute 34, 1
-  10              		.eabi_attribute 18, 4
-  11              		.file	"message.c"
-  12              		.text
-  13              	.Ltext0:
-  14              		.cfi_sections	.debug_frame
-  15              		.section	.text.buffer_to_message,"ax",%progbits
-  16              		.align	1
-  17              		.global	buffer_to_message
-  18              		.arch armv7-m
-  19              		.syntax unified
-  20              		.thumb
-  21              		.thumb_func
-  22              		.fpu softvfp
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"message.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.buffer_to_message,"ax",%progbits
+  18              		.align	1
+  19              		.global	buffer_to_message
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
   24              	buffer_to_message:
   25              	.LVL0:
   26              	.LFB65:
@@ -58,7 +58,7 @@ ARM GAS  /tmp/cc2rx2ID.s 			page 1
   50 000c 2846     		mov	r0, r5
   51 000e FFF7FEFF 		bl	buffer_pop
   52              	.LVL2:
-ARM GAS  /tmp/cc2rx2ID.s 			page 2
+ARM GAS  /tmp/ccJj3SjR.s 			page 2
 
 
   53              		.loc 1 6 16 view .LVU7
@@ -91,178 +91,169 @@ ARM GAS  /tmp/cc2rx2ID.s 			page 1
   78              		.syntax unified
   79              		.thumb
   80              		.thumb_func
-  81              		.fpu softvfp
-  83              	cal_checksum:
-  84              	.LVL5:
-  85              	.LFB66:
+  82              	cal_checksum:
+  83              	.LVL5:
+  84              	.LFB66:
   10:Core/Src/message.c **** 
   11:Core/Src/message.c **** void cal_checksum(uint8_t *msg)
   12:Core/Src/message.c **** {
-  86              		.loc 1 12 1 is_stmt 1 view -0
-  87              		.cfi_startproc
-  88              		@ args = 0, pretend = 0, frame = 0
-  89              		@ frame_needed = 0, uses_anonymous_args = 0
-  90              		@ link register save eliminated.
+  85              		.loc 1 12 1 is_stmt 1 view -0
+  86              		.cfi_startproc
+  87              		@ args = 0, pretend = 0, frame = 0
+  88              		@ frame_needed = 0, uses_anonymous_args = 0
+  89              		@ link register save eliminated.
   13:Core/Src/message.c ****     uint8_t temp=0;
-  91              		.loc 1 13 5 view .LVU17
+  90              		.loc 1 13 5 view .LVU17
   14:Core/Src/message.c ****     for (int i=0;i<3;i++)
-  92              		.loc 1 14 5 view .LVU18
-  93              	.LBB2:
-  94              		.loc 1 14 10 view .LVU19
-  95              		.loc 1 14 14 is_stmt 0 view .LVU20
-  96 0000 0023     		movs	r3, #0
-  97              	.LBE2:
+  91              		.loc 1 14 5 view .LVU18
+  92              	.LBB2:
+  93              		.loc 1 14 10 view .LVU19
+  94              		.loc 1 14 14 is_stmt 0 view .LVU20
+  95 0000 0023     		movs	r3, #0
+  96              	.LBE2:
   13:Core/Src/message.c ****     uint8_t temp=0;
-  98              		.loc 1 13 13 view .LVU21
-  99 0002 1A46     		mov	r2, r3
- 100              	.LBB3:
- 101              		.loc 1 14 5 view .LVU22
- 102 0004 02E0     		b	.L4
-ARM GAS  /tmp/cc2rx2ID.s 			page 3
+  97              		.loc 1 13 13 view .LVU21
+  98 0002 1A46     		mov	r2, r3
+  99              	.LBB3:
+ 100              		.loc 1 14 5 view .LVU22
+ 101 0004 02E0     		b	.L4
+ 102              	.LVL6:
+ARM GAS  /tmp/ccJj3SjR.s 			page 3
 
 
- 103              	.LVL6:
- 104              	.L5:
+ 103              	.L5:
   15:Core/Src/message.c ****     {
   16:Core/Src/message.c ****         temp ^= msg[i];
- 105              		.loc 1 16 9 is_stmt 1 discriminator 3 view .LVU23
- 106              		.loc 1 16 20 is_stmt 0 discriminator 3 view .LVU24
- 107 0006 C15C     		ldrb	r1, [r0, r3]	@ zero_extendqisi2
- 108              		.loc 1 16 14 discriminator 3 view .LVU25
- 109 0008 4A40     		eors	r2, r2, r1
- 110              	.LVL7:
+ 104              		.loc 1 16 9 is_stmt 1 discriminator 3 view .LVU23
+ 105              		.loc 1 16 20 is_stmt 0 discriminator 3 view .LVU24
+ 106 0006 C15C     		ldrb	r1, [r0, r3]	@ zero_extendqisi2
+ 107              		.loc 1 16 14 discriminator 3 view .LVU25
+ 108 0008 4A40     		eors	r2, r2, r1
+ 109              	.LVL7:
   14:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 111              		.loc 1 14 22 is_stmt 1 discriminator 3 view .LVU26
+ 110              		.loc 1 14 23 is_stmt 1 discriminator 3 view .LVU26
+ 111 000a 0133     		adds	r3, r3, #1
+ 112              	.LVL8:
+ 113              	.L4:
   14:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 112              		.loc 1 14 23 is_stmt 0 discriminator 3 view .LVU27
- 113 000a 0133     		adds	r3, r3, #1
- 114              	.LVL8:
- 115              	.L4:
-  14:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 116              		.loc 1 14 18 is_stmt 1 discriminator 1 view .LVU28
-  14:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 117              		.loc 1 14 5 is_stmt 0 discriminator 1 view .LVU29
- 118 000c 022B     		cmp	r3, #2
- 119 000e FADD     		ble	.L5
- 120              	.LBE3:
+ 114              		.loc 1 14 19 discriminator 1 view .LVU27
+ 115 000c 022B     		cmp	r3, #2
+ 116 000e FADD     		ble	.L5
+ 117              	.LBE3:
   17:Core/Src/message.c ****     }
   18:Core/Src/message.c ****     msg[3]= temp;
- 121              		.loc 1 18 5 is_stmt 1 view .LVU30
- 122              		.loc 1 18 11 is_stmt 0 view .LVU31
- 123 0010 C270     		strb	r2, [r0, #3]
+ 118              		.loc 1 18 5 view .LVU28
+ 119              		.loc 1 18 11 is_stmt 0 view .LVU29
+ 120 0010 C270     		strb	r2, [r0, #3]
   19:Core/Src/message.c **** }
- 124              		.loc 1 19 1 view .LVU32
- 125 0012 7047     		bx	lr
- 126              		.cfi_endproc
- 127              	.LFE66:
- 129              		.section	.text.check_checksum,"ax",%progbits
- 130              		.align	1
- 131              		.global	check_checksum
- 132              		.syntax unified
- 133              		.thumb
- 134              		.thumb_func
- 135              		.fpu softvfp
- 137              	check_checksum:
- 138              	.LVL9:
- 139              	.LFB67:
+ 121              		.loc 1 19 1 view .LVU30
+ 122 0012 7047     		bx	lr
+ 123              		.cfi_endproc
+ 124              	.LFE66:
+ 126              		.section	.text.check_checksum,"ax",%progbits
+ 127              		.align	1
+ 128              		.global	check_checksum
+ 129              		.syntax unified
+ 130              		.thumb
+ 131              		.thumb_func
+ 133              	check_checksum:
+ 134              	.LVL9:
+ 135              	.LFB67:
   20:Core/Src/message.c **** 
   21:Core/Src/message.c **** uint8_t check_checksum(uint8_t *msg)
   22:Core/Src/message.c **** {
- 140              		.loc 1 22 1 is_stmt 1 view -0
- 141              		.cfi_startproc
- 142              		@ args = 0, pretend = 0, frame = 0
- 143              		@ frame_needed = 0, uses_anonymous_args = 0
- 144              		@ link register save eliminated.
+ 136              		.loc 1 22 1 is_stmt 1 view -0
+ 137              		.cfi_startproc
+ 138              		@ args = 0, pretend = 0, frame = 0
+ 139              		@ frame_needed = 0, uses_anonymous_args = 0
+ 140              		@ link register save eliminated.
   23:Core/Src/message.c ****     uint8_t temp=0;
- 145              		.loc 1 23 5 view .LVU34
+ 141              		.loc 1 23 5 view .LVU32
   24:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 146              		.loc 1 24 5 view .LVU35
- 147              	.LBB4:
-ARM GAS  /tmp/cc2rx2ID.s 			page 4
-
-
- 148              		.loc 1 24 10 view .LVU36
- 149              		.loc 1 24 14 is_stmt 0 view .LVU37
- 150 0000 0023     		movs	r3, #0
- 151              	.LBE4:
+ 142              		.loc 1 24 5 view .LVU33
+ 143              	.LBB4:
+ 144              		.loc 1 24 10 view .LVU34
+ 145              		.loc 1 24 14 is_stmt 0 view .LVU35
+ 146 0000 0023     		movs	r3, #0
+ 147              	.LBE4:
   23:Core/Src/message.c ****     uint8_t temp=0;
- 152              		.loc 1 23 13 view .LVU38
- 153 0002 1A46     		mov	r2, r3
- 154              	.LBB5:
- 155              		.loc 1 24 5 view .LVU39
- 156 0004 02E0     		b	.L7
- 157              	.LVL10:
- 158              	.L8:
+ 148              		.loc 1 23 13 view .LVU36
+ARM GAS  /tmp/ccJj3SjR.s 			page 4
+
+
+ 149 0002 1A46     		mov	r2, r3
+ 150              	.LBB5:
+ 151              		.loc 1 24 5 view .LVU37
+ 152 0004 02E0     		b	.L7
+ 153              	.LVL10:
+ 154              	.L8:
   25:Core/Src/message.c ****     {
   26:Core/Src/message.c ****         temp ^= msg[i];
- 159              		.loc 1 26 9 is_stmt 1 discriminator 3 view .LVU40
- 160              		.loc 1 26 20 is_stmt 0 discriminator 3 view .LVU41
- 161 0006 C15C     		ldrb	r1, [r0, r3]	@ zero_extendqisi2
- 162              		.loc 1 26 14 discriminator 3 view .LVU42
- 163 0008 4A40     		eors	r2, r2, r1
- 164              	.LVL11:
+ 155              		.loc 1 26 9 is_stmt 1 discriminator 3 view .LVU38
+ 156              		.loc 1 26 20 is_stmt 0 discriminator 3 view .LVU39
+ 157 0006 C15C     		ldrb	r1, [r0, r3]	@ zero_extendqisi2
+ 158              		.loc 1 26 14 discriminator 3 view .LVU40
+ 159 0008 4A40     		eors	r2, r2, r1
+ 160              	.LVL11:
   24:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 165              		.loc 1 24 22 is_stmt 1 discriminator 3 view .LVU43
+ 161              		.loc 1 24 23 is_stmt 1 discriminator 3 view .LVU41
+ 162 000a 0133     		adds	r3, r3, #1
+ 163              	.LVL12:
+ 164              	.L7:
   24:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 166              		.loc 1 24 23 is_stmt 0 discriminator 3 view .LVU44
- 167 000a 0133     		adds	r3, r3, #1
- 168              	.LVL12:
- 169              	.L7:
-  24:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 170              		.loc 1 24 18 is_stmt 1 discriminator 1 view .LVU45
-  24:Core/Src/message.c ****     for (int i=0;i<3;i++)
- 171              		.loc 1 24 5 is_stmt 0 discriminator 1 view .LVU46
- 172 000c 022B     		cmp	r3, #2
- 173 000e FADD     		ble	.L8
- 174              	.LBE5:
+ 165              		.loc 1 24 19 discriminator 1 view .LVU42
+ 166 000c 022B     		cmp	r3, #2
+ 167 000e FADD     		ble	.L8
+ 168              	.LBE5:
   27:Core/Src/message.c ****     }
   28:Core/Src/message.c **** 
   29:Core/Src/message.c ****     if (temp!= msg[3]){
- 175              		.loc 1 29 5 is_stmt 1 view .LVU47
- 176              		.loc 1 29 19 is_stmt 0 view .LVU48
- 177 0010 C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
- 178              	.LVL13:
- 179              		.loc 1 29 8 view .LVU49
- 180 0012 9342     		cmp	r3, r2
- 181 0014 01D1     		bne	.L10
+ 169              		.loc 1 29 5 view .LVU43
+ 170              		.loc 1 29 19 is_stmt 0 view .LVU44
+ 171 0010 C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
+ 172              	.LVL13:
+ 173              		.loc 1 29 8 view .LVU45
+ 174 0012 9342     		cmp	r3, r2
+ 175 0014 01D1     		bne	.L10
   30:Core/Src/message.c ****         return 0;
   31:Core/Src/message.c ****     }
   32:Core/Src/message.c **** 
   33:Core/Src/message.c ****     return 1;
- 182              		.loc 1 33 12 view .LVU50
- 183 0016 0120     		movs	r0, #1
- 184              	.LVL14:
- 185              		.loc 1 33 12 view .LVU51
- 186 0018 7047     		bx	lr
- 187              	.LVL15:
- 188              	.L10:
+ 176              		.loc 1 33 12 view .LVU46
+ 177 0016 0120     		movs	r0, #1
+ 178              	.LVL14:
+ 179              		.loc 1 33 12 view .LVU47
+ 180 0018 7047     		bx	lr
+ 181              	.LVL15:
+ 182              	.L10:
   30:Core/Src/message.c ****         return 0;
- 189              		.loc 1 30 16 view .LVU52
-ARM GAS  /tmp/cc2rx2ID.s 			page 5
-
-
- 190 001a 0020     		movs	r0, #0
- 191              	.LVL16:
+ 183              		.loc 1 30 16 view .LVU48
+ 184 001a 0020     		movs	r0, #0
+ 185              	.LVL16:
   34:Core/Src/message.c **** }...
- 192              		.loc 1 34 1 view .LVU53
- 193 001c 7047     		bx	lr
- 194              		.cfi_endproc
- 195              	.LFE67:
- 197              		.text
- 198              	.Letext0:
- 199              		.file 2 "Core/Inc/buffer.h"
- 200              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
-ARM GAS  /tmp/cc2rx2ID.s 			page 6
+ 186              		.loc 1 34 1 view .LVU49
+ 187 001c 7047     		bx	lr
+ 188              		.cfi_endproc
+ 189              	.LFE67:
+ 191              		.text
+ 192              	.Letext0:
+ 193              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+ARM GAS  /tmp/ccJj3SjR.s 			page 5
+
+
+ 194              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+ 195              		.file 4 "Core/Inc/buffer.h"
+ARM GAS  /tmp/ccJj3SjR.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 message.c
-     /tmp/cc2rx2ID.s:16     .text.buffer_to_message:0000000000000000 $t
-     /tmp/cc2rx2ID.s:24     .text.buffer_to_message:0000000000000000 buffer_to_message
-     /tmp/cc2rx2ID.s:76     .text.cal_checksum:0000000000000000 $t
-     /tmp/cc2rx2ID.s:83     .text.cal_checksum:0000000000000000 cal_checksum
-     /tmp/cc2rx2ID.s:130    .text.check_checksum:0000000000000000 $t
-     /tmp/cc2rx2ID.s:137    .text.check_checksum:0000000000000000 check_checksum
+     /tmp/ccJj3SjR.s:18     .text.buffer_to_message:0000000000000000 $t
+     /tmp/ccJj3SjR.s:24     .text.buffer_to_message:0000000000000000 buffer_to_message
+     /tmp/ccJj3SjR.s:76     .text.cal_checksum:0000000000000000 $t
+     /tmp/ccJj3SjR.s:82     .text.cal_checksum:0000000000000000 cal_checksum
+     /tmp/ccJj3SjR.s:127    .text.check_checksum:0000000000000000 $t
+     /tmp/ccJj3SjR.s:133    .text.check_checksum:0000000000000000 check_checksum
 
 UNDEFINED SYMBOLS
 buffer_pop

@@ -1,28 +1,28 @@
-ARM GAS  /tmp/ccFEdd0x.s 			page 1
+ARM GAS  /tmp/ccarPo6C.s 			page 1
 
 
    1              		.cpu cortex-m3
-   2              		.eabi_attribute 20, 1
-   3              		.eabi_attribute 21, 1
-   4              		.eabi_attribute 23, 3
-   5              		.eabi_attribute 24, 1
-   6              		.eabi_attribute 25, 1
-   7              		.eabi_attribute 26, 1
-   8              		.eabi_attribute 30, 1
-   9              		.eabi_attribute 34, 1
-  10              		.eabi_attribute 18, 4
-  11              		.file	"buffer.c"
-  12              		.text
-  13              	.Ltext0:
-  14              		.cfi_sections	.debug_frame
-  15              		.section	.text.buffer_push,"ax",%progbits
-  16              		.align	1
-  17              		.global	buffer_push
-  18              		.arch armv7-m
-  19              		.syntax unified
-  20              		.thumb
-  21              		.thumb_func
-  22              		.fpu softvfp
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"buffer.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.buffer_push,"ax",%progbits
+  18              		.align	1
+  19              		.global	buffer_push
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
   24              	buffer_push:
   25              	.LVL0:
   26              	.LFB65:
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccFEdd0x.s 			page 1
    7:Core/Src/buffer.c ****   
    8:Core/Src/buffer.c **** }
   50              		.loc 1 8 1 view .LVU8
-ARM GAS  /tmp/ccFEdd0x.s 			page 2
+ARM GAS  /tmp/ccarPo6C.s 			page 2
 
 
   51 0018 7047     		bx	lr
@@ -70,61 +70,69 @@ ARM GAS  /tmp/ccFEdd0x.s 			page 1
   58              		.syntax unified
   59              		.thumb
   60              		.thumb_func
-  61              		.fpu softvfp
-  63              	buffer_pop:
-  64              	.LVL1:
-  65              	.LFB66:
+  62              	buffer_pop:
+  63              	.LVL1:
+  64              	.LFB66:
    9:Core/Src/buffer.c **** 
   10:Core/Src/buffer.c **** uint8_t buffer_pop(circular_buffer *buffer)
   11:Core/Src/buffer.c **** {
-  66              		.loc 1 11 1 is_stmt 1 view -0
-  67              		.cfi_startproc
-  68              		@ args = 0, pretend = 0, frame = 0
-  69              		@ frame_needed = 0, uses_anonymous_args = 0
-  70              		@ link register save eliminated.
-  71              		.loc 1 11 1 is_stmt 0 view .LVU10
-  72 0000 0246     		mov	r2, r0
+  65              		.loc 1 11 1 is_stmt 1 view -0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69              		@ link register save eliminated.
+  70              		.loc 1 11 1 is_stmt 0 view .LVU10
+  71 0000 0246     		mov	r2, r0
   12:Core/Src/buffer.c ****     uint8_t buf_data = buffer->data[buffer->tail];
-  73              		.loc 1 12 5 is_stmt 1 view .LVU11
-  74              		.loc 1 12 43 is_stmt 0 view .LVU12
-  75 0002 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
-  76              		.loc 1 12 13 view .LVU13
-  77 0004 C118     		adds	r1, r0, r3
-  78 0006 8878     		ldrb	r0, [r1, #2]	@ zero_extendqisi2
-  79              	.LVL2:
+  72              		.loc 1 12 5 is_stmt 1 view .LVU11
+  73              		.loc 1 12 43 is_stmt 0 view .LVU12
+  74 0002 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
+  75              		.loc 1 12 13 view .LVU13
+  76 0004 C118     		adds	r1, r0, r3
+  77 0006 8878     		ldrb	r0, [r1, #2]	@ zero_extendqisi2
+  78              	.LVL2:
   13:Core/Src/buffer.c ****     buffer->tail= (buffer->tail+1)%BUFFER_SIZE;
-  80              		.loc 1 13 5 is_stmt 1 view .LVU14
-  81              		.loc 1 13 32 is_stmt 0 view .LVU15
-  82 0008 0133     		adds	r3, r3, #1
-  83              		.loc 1 13 35 view .LVU16
-  84 000a 5942     		rsbs	r1, r3, #0
-  85 000c 03F03F03 		and	r3, r3, #63
-  86 0010 01F03F01 		and	r1, r1, #63
-  87 0014 58BF     		it	pl
-  88 0016 4B42     		rsbpl	r3, r1, #0
-  89              		.loc 1 13 17 view .LVU17
-  90 0018 5370     		strb	r3, [r2, #1]
+  79              		.loc 1 13 5 is_stmt 1 view .LVU14
+  80              		.loc 1 13 32 is_stmt 0 view .LVU15
+  81 0008 0133     		adds	r3, r3, #1
+  82              		.loc 1 13 35 view .LVU16
+  83 000a 5942     		rsbs	r1, r3, #0
+  84              	.LVL3:
+  85              		.loc 1 13 35 view .LVU17
+  86 000c 03F03F03 		and	r3, r3, #63
+  87              	.LVL4:
+  88              		.loc 1 13 35 view .LVU18
+  89 0010 01F03F01 		and	r1, r1, #63
+  90 0014 58BF     		it	pl
+  91 0016 4B42     		rsbpl	r3, r1, #0
+  92              		.loc 1 13 17 view .LVU19
+  93 0018 5370     		strb	r3, [r2, #1]
+  94              	.LVL5:
   14:Core/Src/buffer.c ****     return buf_data;
-  91              		.loc 1 14 5 is_stmt 1 view .LVU18
+  95              		.loc 1 14 5 is_stmt 1 view .LVU20
   15:Core/Src/buffer.c **** 
   16:Core/Src/buffer.c **** 
   17:Core/Src/buffer.c **** }...
-  92              		.loc 1 17 1 is_stmt 0 view .LVU19
-  93 001a 7047     		bx	lr
-  94              		.cfi_endproc
-  95              	.LFE66:
-  97              		.text
-  98              	.Letext0:
-  99              		.file 2 "Core/Inc/buffer.h"
- 100              		.file 3 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
-ARM GAS  /tmp/ccFEdd0x.s 			page 3
+  96              		.loc 1 17 1 is_stmt 0 view .LVU21
+  97 001a 7047     		bx	lr
+  98              		.cfi_endproc
+  99              	.LFE66:
+ 101              		.text
+ARM GAS  /tmp/ccarPo6C.s 			page 3
+
+
+ 102              	.Letext0:
+ 103              		.file 2 "/usr/arm-none-eabi/include/machine/_default_types.h"
+ 104              		.file 3 "/usr/arm-none-eabi/include/sys/_stdint.h"
+ 105              		.file 4 "Core/Inc/buffer.h"
+ARM GAS  /tmp/ccarPo6C.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 buffer.c
-     /tmp/ccFEdd0x.s:16     .text.buffer_push:0000000000000000 $t
-     /tmp/ccFEdd0x.s:24     .text.buffer_push:0000000000000000 buffer_push
-     /tmp/ccFEdd0x.s:56     .text.buffer_pop:0000000000000000 $t
-     /tmp/ccFEdd0x.s:63     .text.buffer_pop:0000000000000000 buffer_pop
+     /tmp/ccarPo6C.s:18     .text.buffer_push:0000000000000000 $t
+     /tmp/ccarPo6C.s:24     .text.buffer_push:0000000000000000 buffer_push
+     /tmp/ccarPo6C.s:56     .text.buffer_pop:0000000000000000 $t
+     /tmp/ccarPo6C.s:62     .text.buffer_pop:0000000000000000 buffer_pop
 
 NO UNDEFINED SYMBOLS

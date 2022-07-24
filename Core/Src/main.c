@@ -46,10 +46,13 @@
 /* USER CODE BEGIN PV */
 uint16_t* unique_id;
 uint8_t f_busy;
+uint8_t f_start_counting;
 uint8_t f_read_msg;
 uint8_t f_timer_10ms=0;
 uint8_t f_timer_30ms=0;
 uint8_t d_timer_30ms;
+uint8_t f_timer_digit_update=0;
+uint8_t d_timer_digit_update;
 uint8_t key_value;
 uint8_t curr_event;
 //uint8_t bufferEvent[64];
@@ -66,6 +69,7 @@ uint8_t RX_msg[4];
 uint8_t *pRX_msg;
 uint8_t *pTX_msg;
 uint8_t state,event;
+uint8_t min_digit, max_digit;
 int digit;
 uint8_t seven_segment_table[17] = {	0b0111111,	// '0'
 		                            	 0b0000110,	// '1'
@@ -240,6 +244,15 @@ void task_timer(void)
     
     
   }
+
+  d_timer_digit_update++;
+  if(d_timer_digit_update>75){
+    d_timer_digit_update=0;
+    f_timer_digit_update=1;
+    
+    
+  }
+  
   
 
 }
@@ -266,6 +279,8 @@ void key_read_task(void)
   if (key_value==KEY_PRESSED){
       buffer_push(&event_buffer,EVENT_KEY_PRESSED);
       
+  }else if(key_value==KEY_RELEASED){
+    buffer_push(&event_buffer,EVENT_KEY_RELEASED);
   }
 
 }
@@ -309,9 +324,14 @@ void main_task(void)
     switch (event)
     {
     case EVENT_KEY_PRESSED:
-      digit=(digit+1)>9? 0 :digit+1;
-      seven_segment_display(seven_segment_table[digit]);
+      f_timer_digit_update=1;
+      d_timer_digit_update=0;
+      f_start_counting=1;
+      event=EVENT_RESET;
+      break;
 
+    case EVENT_KEY_RELEASED:
+      f_start_counting=0;
       event=EVENT_RESET;
       break;
     
@@ -342,6 +362,14 @@ void main_task(void)
       break;
 
     }
+    default:
+        if(!f_start_counting) break;
+        if(!f_timer_digit_update) break;
+        f_timer_digit_update=0;
+        digit=(digit+1)>max_digit? min_digit :digit+1;
+        seven_segment_display(seven_segment_table[digit]);
+              
+      break;
 
     break;
  
@@ -411,6 +439,16 @@ void RS485_Read_Message(void){
         //RS485_Send_Message();
   
   }else if(RX_msg[1]== FUNC_FIND_SLAVE){
+
+      if (RX_msg[2]=='1'){
+          min_digit = 0;
+          max_digit = 9;
+      }
+      else if (RX_msg[2]=='2'){
+          min_digit = 10;
+          max_digit = 15;
+      }
+
        buffer_push(&event_buffer, EVENT_MASTER_FOUND);
   }
 }
